@@ -7,11 +7,13 @@ F:\DEVOPS\ecommerce\backend\src\main\java\com\shopease\controller\OrderControlle
 F:\DEVOPS\ecommerce\backend\src\main\java\com\shopease\controller\PaymentController.java
 F:\DEVOPS\ecommerce\backend\src\main\java\com\shopease\controller\ProductController.java
 F:\DEVOPS\ecommerce\backend\src\main\java\com\shopease\controller\ReviewController.java
+F:\DEVOPS\ecommerce\backend\src\main\java\com\shopease\controller\UserController.java
 F:\DEVOPS\ecommerce\backend\src\main\java\com\shopease\controller\WishlistController.java
 F:\DEVOPS\ecommerce\backend\src\main\java\com\shopease\dto\request\LoginRequest.java
 F:\DEVOPS\ecommerce\backend\src\main\java\com\shopease\dto\request\RegisterRequest.java
 F:\DEVOPS\ecommerce\backend\src\main\java\com\shopease\dto\response\ApiResponse.java
 F:\DEVOPS\ecommerce\backend\src\main\java\com\shopease\dto\response\JwtResponse.java
+F:\DEVOPS\ecommerce\backend\src\main\java\com\shopease\dto\response\UserDto.java
 F:\DEVOPS\ecommerce\backend\src\main\java\com\shopease\entity\Address.java
 F:\DEVOPS\ecommerce\backend\src\main\java\com\shopease\entity\Cart.java
 F:\DEVOPS\ecommerce\backend\src\main\java\com\shopease\entity\CartItem.java

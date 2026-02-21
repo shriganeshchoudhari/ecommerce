@@ -9,11 +9,11 @@
 # ============================================================
 
 @host = http://localhost:8080/api/v1
-@email = testapi_{{$datetime iso8601}}@shopease.com
+@email = testapi_user@shopease.com
 @password = Password123!
 
 # Global variables (will be updated dynamically after login)
-@token = {{login.response.body.accessToken}}
+@token = {{login.response.body.$.accessToken}}
 
 # ============================================================
 # 1. AUTHENTICATION

@@ -8,6 +8,7 @@ com\shopease\service\AddressService.class
 com\shopease\service\CategoryService.class
 com\shopease\dto\request\RegisterRequest.class
 com\shopease\security\UserDetailsServiceImpl.class
+com\shopease\dto\response\UserDto$UserDtoBuilder.class
 com\shopease\repository\OrderRepository.class
 com\shopease\dto\response\ApiResponse$ApiResponseBuilder.class
 com\shopease\service\ReviewService.class
@@ -30,7 +31,9 @@ com\shopease\repository\ProductRepository.class
 com\shopease\entity\User$Role.class
 com\shopease\repository\PaymentRepository.class
 com\shopease\service\OrderService.class
+com\shopease\dto\response\UserDto.class
 com\shopease\controller\AuthController.class
+com\shopease\controller\UserController.class
 com\shopease\entity\WishlistItem.class
 com\shopease\service\AuthService.class
 com\shopease\entity\ProductImage$ProductImageBuilder.class

@@ -3,6 +3,8 @@ package com.shopease.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "cart_items", uniqueConstraints = {
         @UniqueConstraint(columnNames = { "cart_id", "product_id" })
@@ -20,6 +22,7 @@ public class CartItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id", nullable = false)
+    @JsonBackReference
     private Cart cart;
 
     @ManyToOne(fetch = FetchType.EAGER)
