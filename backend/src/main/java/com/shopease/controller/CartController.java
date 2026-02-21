@@ -63,4 +63,17 @@ public class CartController {
     public ResponseEntity<Cart> clearCart(@AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(cartService.clearCart(getUser(userDetails)));
     }
+
+    @PostMapping("/coupon")
+    public ResponseEntity<Cart> applyCoupon(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody Map<String, String> payload) {
+        String code = payload.get("code");
+        return ResponseEntity.ok(cartService.applyCoupon(getUser(userDetails), code));
+    }
+
+    @DeleteMapping("/coupon")
+    public ResponseEntity<Cart> removeCoupon(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(cartService.removeCoupon(getUser(userDetails)));
+    }
 }

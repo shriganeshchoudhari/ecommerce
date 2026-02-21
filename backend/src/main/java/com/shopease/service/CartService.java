@@ -4,13 +4,16 @@ import com.shopease.entity.Cart;
 import com.shopease.entity.CartItem;
 import com.shopease.entity.Product;
 import com.shopease.entity.User;
+import com.shopease.entity.Coupon;
 import com.shopease.exception.BadRequestException;
 import com.shopease.exception.ResourceNotFoundException;
 import com.shopease.repository.CartRepository;
+import com.shopease.repository.CouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
@@ -19,6 +22,7 @@ public class CartService {
 
     private final CartRepository cartRepository;
     private final ProductService productService;
+    private final CouponRepository couponRepository;
 
     @Transactional(readOnly = true)
     public Cart getCartByUserId(Long userId) {
@@ -92,6 +96,36 @@ public class CartService {
     public Cart clearCart(User user) {
         Cart cart = getCartByUserId(user.getId());
         cart.getItems().clear();
+        cart.setCoupon(null);
+        return cartRepository.save(cart);
+    }
+
+    @Transactional
+    public Cart applyCoupon(User user, String code) {
+        Cart cart = getCartByUserId(user.getId());
+        Coupon coupon = couponRepository.findByCode(code.toUpperCase())
+                .orElseThrow(() -> new ResourceNotFoundException("Coupon not found"));
+
+        if (!coupon.isValid()) {
+            throw new BadRequestException("Coupon is expired or inactive");
+        }
+
+        BigDecimal subtotal = cart.getItems().stream()
+                .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        if (coupon.getMinOrderAmount() != null && subtotal.compareTo(coupon.getMinOrderAmount()) < 0) {
+            throw new BadRequestException("Order amount does not meet the minimum requirement for this coupon");
+        }
+
+        cart.setCoupon(coupon);
+        return cartRepository.save(cart);
+    }
+
+    @Transactional
+    public Cart removeCoupon(User user) {
+        Cart cart = getCartByUserId(user.getId());
+        cart.setCoupon(null);
         return cartRepository.save(cart);
     }
 }

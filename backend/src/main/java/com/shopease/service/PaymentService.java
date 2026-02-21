@@ -89,10 +89,32 @@ public class PaymentService {
             order.getItems().add(orderItem);
         }
 
-        order.setTotalAmount(totalAmount);
+        BigDecimal discountAmount = BigDecimal.ZERO;
+
+        if (cart.getCoupon() != null && cart.getCoupon().isValid()) {
+            Coupon coupon = cart.getCoupon();
+            if (coupon.getMinOrderAmount() == null || totalAmount.compareTo(coupon.getMinOrderAmount()) >= 0) {
+                if ("PERCENTAGE".equalsIgnoreCase(coupon.getDiscountType())) {
+                    discountAmount = totalAmount.multiply(coupon.getDiscountValue())
+                            .divide(new BigDecimal("100"), 2, java.math.RoundingMode.HALF_UP);
+                } else if ("FIXED".equalsIgnoreCase(coupon.getDiscountType())) {
+                    discountAmount = coupon.getDiscountValue();
+                }
+
+                if (discountAmount.compareTo(totalAmount) > 0) {
+                    discountAmount = totalAmount;
+                }
+
+                order.setCoupon(coupon);
+            }
+        }
+
+        order.setDiscountAmount(discountAmount);
+        order.setTotalAmount(totalAmount.subtract(discountAmount));
 
         // Empty the cart
         cart.getItems().clear();
+        cart.setCoupon(null);
 
         return orderRepository.save(order);
     }

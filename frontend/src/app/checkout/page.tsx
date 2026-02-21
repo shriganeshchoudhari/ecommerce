@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
-import { Loader2, MapPin, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { Loader2, MapPin, CheckCircle2, ShieldCheck, Tag } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { useCartStore } from '@/store/cartStore';
@@ -137,7 +137,16 @@ export default function CheckoutPage() {
 
     const cartTotal = cart.items.reduce((total, item) => total + item.subtotal, 0);
     const gst = Math.round(cartTotal * 0.18);
-    const finalTotal = cartTotal + gst;
+
+    let discount = 0;
+    if (cart.coupon) {
+        discount = cart.coupon.discountType === 'FIXED'
+            ? cart.coupon.discountValue
+            : Math.round(cartTotal * (cart.coupon.discountValue / 100));
+        if (discount > cartTotal) discount = cartTotal;
+    }
+
+    const finalTotal = Math.max(0, cartTotal - discount + gst);
 
     return (
         <>
@@ -257,6 +266,16 @@ export default function CheckoutPage() {
                                     <span className="text-muted-foreground">Tax (18% GST)</span>
                                     <span className="font-medium">₹{gst.toLocaleString()}</span>
                                 </div>
+
+                                {cart.coupon && (
+                                    <div className="flex justify-between text-green-600 font-medium">
+                                        <span className="flex items-center">
+                                            <Tag className="h-4 w-4 mr-1" />
+                                            Discount ({cart.coupon.code})
+                                        </span>
+                                        <span>-₹{discount.toLocaleString()}</span>
+                                    </div>
+                                )}
 
                                 <Separator className="my-4" />
 

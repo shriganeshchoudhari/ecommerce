@@ -4,14 +4,46 @@ import { useCartStore } from '@/store/cartStore';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { ShoppingBag, Trash2, Plus, Minus, ArrowRight, Loader2 } from 'lucide-react';
+import { ShoppingBag, Trash2, Plus, Minus, ArrowRight, Loader2, Tag, X } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
 
 export default function CartPage() {
-    const { cart, isLoading, updateItemQuantity, removeItem, clearCart } = useCartStore();
+    const { cart, isLoading, updateItemQuantity, removeItem, clearCart, applyCoupon, removeCoupon } = useCartStore();
     const { isAuthenticated } = useAuthStore();
     const router = useRouter();
+
+    const [couponCode, setCouponCode] = useState('');
+    const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+
+    const handleApplyCoupon = async () => {
+        if (!couponCode.trim()) return;
+        setIsApplyingCoupon(true);
+        try {
+            await applyCoupon(couponCode);
+            setCouponCode('');
+            toast.success("Coupon Applied: Your discount has been successfully applied.");
+        } catch (error: any) {
+            toast.error(error.message || "Failed to apply coupon");
+        } finally {
+            setIsApplyingCoupon(false);
+        }
+    };
+
+    const handleRemoveCoupon = async () => {
+        setIsApplyingCoupon(true);
+        try {
+            await removeCoupon();
+            toast.success("Coupon Removed: Your discount has been removed.");
+        } catch (error: any) {
+            toast.error("Failed to remove coupon");
+        } finally {
+            setIsApplyingCoupon(false);
+        }
+    };
 
     if (!isAuthenticated) {
         return (
@@ -151,15 +183,69 @@ export default function CartPage() {
                                     <span className="font-medium">₹{Math.round(cartTotal * 0.18).toLocaleString()}</span>
                                 </div>
 
+                                {cart?.coupon && (
+                                    <div className="flex justify-between text-green-600 font-medium">
+                                        <span className="flex items-center">
+                                            <Tag className="h-4 w-4 mr-1" />
+                                            Discount ({cart.coupon.code})
+                                            <button
+                                                onClick={handleRemoveCoupon}
+                                                disabled={isApplyingCoupon}
+                                                className="ml-2 bg-destructive/10 text-destructive rounded-full p-0.5 hover:bg-destructive shadow-sm hover:text-white transition-colors"
+                                                title="Remove Coupon"
+                                            >
+                                                <X className="h-3 w-3" />
+                                            </button>
+                                        </span>
+                                        <span>
+                                            -₹{(() => {
+                                                if (cart.coupon.discountType === 'FIXED') return cart.coupon.discountValue;
+                                                return Math.round(cartTotal * (cart.coupon.discountValue / 100));
+                                            })().toLocaleString()}
+                                        </span>
+                                    </div>
+                                )}
+
                                 <Separator className="my-4" />
 
                                 <div className="flex justify-between items-center text-lg font-bold">
                                     <span>Order Total</span>
-                                    <span>₹{Math.round(cartTotal * 1.18).toLocaleString()}</span>
+                                    <span>
+                                        ₹{(() => {
+                                            const tax = Math.round(cartTotal * 0.18);
+                                            let discount = 0;
+                                            if (cart?.coupon) {
+                                                discount = cart.coupon.discountType === 'FIXED'
+                                                    ? cart.coupon.discountValue
+                                                    : Math.round(cartTotal * (cart.coupon.discountValue / 100));
+                                                // Cap discount to not exceed cart total (before tax)
+                                                if (discount > cartTotal) discount = cartTotal;
+                                            }
+                                            return Math.max(0, cartTotal - discount + tax).toLocaleString();
+                                        })()}
+                                    </span>
                                 </div>
                             </div>
 
                             <div className="mt-8 space-y-4">
+                                {!cart?.coupon && (
+                                    <div className="flex space-x-2">
+                                        <Input
+                                            placeholder="Promo Code"
+                                            value={couponCode}
+                                            onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                                            disabled={isApplyingCoupon || isLoading}
+                                        />
+                                        <Button
+                                            variant="outline"
+                                            onClick={handleApplyCoupon}
+                                            disabled={!couponCode.trim() || isApplyingCoupon || isLoading}
+                                        >
+                                            {isApplyingCoupon ? <Loader2 className="h-4 w-4 animate-spin" /> : "Apply"}
+                                        </Button>
+                                    </div>
+                                )}
+
                                 <Button className="w-full" size="lg" asChild>
                                     <Link href="/checkout">
                                         Checkout <ArrowRight className="ml-2 h-4 w-4" />

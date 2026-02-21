@@ -36,6 +36,10 @@ public class Cart {
     @JsonManagedReference
     private List<CartItem> items = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "coupon_id")
+    private Coupon coupon;
+
     @LastModifiedDate
     private LocalDateTime updatedAt;
 }

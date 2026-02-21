@@ -12,6 +12,8 @@ interface CartState {
     updateItemQuantity: (itemId: number, quantity: number) => Promise<void>;
     removeItem: (itemId: number) => Promise<void>;
     clearCart: () => Promise<void>;
+    applyCoupon: (code: string) => Promise<void>;
+    removeCoupon: () => Promise<void>;
 }
 
 export const useCartStore = create<CartState>((set, get) => ({
@@ -69,6 +71,28 @@ export const useCartStore = create<CartState>((set, get) => ({
             set({ cart: response.data, isLoading: false });
         } catch (error: any) {
             set({ error: error.response?.data?.message || 'Failed to clear cart', isLoading: false });
+            throw error;
+        }
+    },
+
+    applyCoupon: async (code: string) => {
+        set({ isLoading: true, error: null });
+        try {
+            const response = await api.post<Cart>('/cart/coupon', { code });
+            set({ cart: response.data, isLoading: false });
+        } catch (error: any) {
+            set({ error: error.response?.data?.message || 'Failed to apply coupon', isLoading: false });
+            throw error;
+        }
+    },
+
+    removeCoupon: async () => {
+        set({ isLoading: true, error: null });
+        try {
+            const response = await api.delete<Cart>('/cart/coupon');
+            set({ cart: response.data, isLoading: false });
+        } catch (error: any) {
+            set({ error: error.response?.data?.message || 'Failed to remove coupon', isLoading: false });
             throw error;
         }
     }

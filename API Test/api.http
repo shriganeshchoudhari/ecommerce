@@ -9,7 +9,9 @@
 # ============================================================
 
 @host = http://localhost:8080/api/v1
-@email = testapi_user@shopease.com
+@email = admin_test@shopease.com 
+# testapi_user@shopease.com use for this mail for ROLE CUSTOMER
+# admin_test@shopease.com use for this mail for ROLE ADMIN
 @password = Password123!
 
 # Global variables (will be updated dynamically after login)
@@ -154,3 +156,27 @@ GET http://localhost:8080/actuator/health
 
 ### Actuator Info
 GET http://localhost:8080/actuator/info
+
+# ============================================================
+# 7. ADMIN (Requires Admin Token)
+# ============================================================
+
+### Get All Coupons
+GET {{host}}/admin/coupons
+Authorization: Bearer {{token}}
+
+###
+
+### Create Coupon
+POST {{host}}/admin/coupons
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "code": "WINTER26",
+  "discountType": "PERCENTAGE",
+  "discountValue": 26.00,
+  "minOrderAmount": 500.00,
+  "validFrom": "2026-06-01T00:00:00Z",
+  "validUntil": "2026-08-31T23:59:59Z"
+}

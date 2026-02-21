@@ -15,4 +15,11 @@ export interface CartItem {
 export interface Cart {
     id: number;
     items: CartItem[];
+    coupon?: {
+        id: number;
+        code: string;
+        discountType: 'PERCENTAGE' | 'FIXED';
+        discountValue: number;
+        minOrderAmount: number | null;
+    } | null;
 }
