@@ -102,4 +102,10 @@ public class AdminController {
         stats.put("totalRevenue", 150000);
         return ResponseEntity.ok(stats);
     }
+
+    // --- USERS ---
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userRepository.findAll());
+    }
 }

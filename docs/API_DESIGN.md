@@ -321,17 +321,69 @@ Verify payment after Razorpay callback.
 
 ---
 
-## 9. Review APIs (`/reviews`) 🔒 Auth Required
+## 9. Review APIs (`/reviews`) 🔒 Auth Required (submit) / Public (read)
 
-### GET `/products/{productId}/reviews`
-### POST `/products/{productId}/reviews`
+### GET `/reviews/product/{productId}`
+Returns all approved reviews for a product (public).
+
+**Response `200`:**
 ```json
-{ "rating": 5, "comment": "Excellent product!" }
+[
+  {
+    "id": 1,
+    "rating": 5,
+    "comment": "Excellent product!",
+    "createdAt": "2026-02-20T10:00:00Z",
+    "user": { "name": "John Doe" }
+  }
+]
+```
+
+### POST `/reviews` 🔒 Auth Required (must have purchased product)
+Submit a product review.
+```json
+{
+  "productId": 1,
+  "rating": 5,
+  "comment": "Excellent product! Highly recommended."
+}
+```
+**Response `201`:** Created review object.
+
+---
+
+## 10. Product Variants API (`/products/{id}/variants`) — Public
+
+### GET `/products/{id}/variants`
+Returns all active size/color variants for a product.
+
+**Response `200`:**
+```json
+[
+  {
+    "id": 1,
+    "size": "M",
+    "color": "Black",
+    "skuSuffix": "M-BLK",
+    "stockQuantity": 55,
+    "priceOverride": null,
+    "active": true
+  }
+]
 ```
 
 ---
 
-## 10. User Profile APIs (`/users/me`) 🔒 Auth Required
+## 11. Recommendation API (`/products/{id}/recommendations`) — Public
+
+### GET `/products/{id}/recommendations`
+Returns up to 6 products in the same category, excluding the current product.
+
+**Response `200`:** Array of `Product` objects.
+
+---
+
+## 12. User Profile APIs (`/users/me`) 🔒 Auth Required
 
 ### GET `/users/me`
 ### PUT `/users/me`
@@ -339,20 +391,27 @@ Verify payment after Razorpay callback.
 { "name": "John Updated" }
 ```
 
-### GET `/users/me/addresses`
-### POST `/users/me/addresses`
-### PUT `/users/me/addresses/{id}`
-### DELETE `/users/me/addresses/{id}`
+### GET `/addresses`  — List saved addresses
+### POST `/addresses` — Create a new address
+```json
+{
+  "streetName": "123 MG Road",
+  "city": "Bangalore",
+  "state": "Karnataka",
+  "zipCode": "560001",
+  "country": "India",
+  "isDefault": true
+}
+```
+### PUT `/addresses/{id}` — Update an address
+### DELETE `/addresses/{id}` — Delete an address
 
 ---
 
-## 11. Coupon APIs (`/coupons`) 🔒 ADMIN Only
+## 13. Coupon APIs (`/admin/coupons`) 🔒 ADMIN Only
 
 ### GET `/admin/coupons`
-List all coupons.
-
 ### POST `/admin/coupons`
-Create a new store-wide coupon.
 ```json
 {
   "code": "SUMMER10",
@@ -363,43 +422,71 @@ Create a new store-wide coupon.
   "validUntil": "2026-08-31T23:59:59Z"
 }
 ```
+`discountType`: `PERCENTAGE` | `FIXED`
 
 ### DELETE `/admin/coupons/{id}`
-Deactivate a coupon.
 
 ---
 
-## 12. Admin APIs (`/admin`) 🔒 ADMIN Only
+## 14. Admin APIs (`/admin`) 🔒 ADMIN Only
 
-### GET `/admin/users` — List all users
-### PUT `/admin/users/{id}/disable` — Disable a user
-### GET `/admin/orders` — All orders with filters
-### PUT `/admin/orders/{id}/status` — Update order status
+### GET `/admin/users`
+Returns all registered users.
+
+**Response `200`:** Array of `User` objects (id, name, email, role, enabled, createdAt).
+
+### GET `/admin/orders?page=0&size=20`
+All orders with pagination.
+
+### PUT `/admin/orders/{id}/status`
+Update order status.
 ```json
 { "status": "SHIPPED" }
 ```
-### GET `/admin/dashboard/stats` — Sales stats
+`status` enum: `PENDING` | `CONFIRMED` | `SHIPPED` | `DELIVERED` | `CANCELLED`
+
+### POST `/admin/products` — Create product
+### PUT `/admin/products/{id}` — Update product
+### DELETE `/admin/products/{id}` — Delete product
+
+### POST `/admin/categories` — Create category
+### PUT `/admin/categories/{id}` — Update category
+### DELETE `/admin/categories/{id}` — Delete category
+
+### GET `/admin/dashboard/stats`
 ```json
 {
-  "totalRevenue": 1500000.00,
-  "totalOrders": 450,
   "totalUsers": 1200,
-  "topProducts": [...]
+  "totalOrders": 450,
+  "totalRevenue": 1500000
 }
 ```
 
 ---
 
-## 12. System Health & Actuator (`/actuator`)
+## 15. System Health & Actuator
 
 ### GET `/actuator/health`
-Check application and database health status.
-**Response `200`:**
 ```json
-{
-  "status": "UP"
-}
+{ "status": "UP" }
 ```
 
 ### GET `/actuator/info`
-Get application information.
+Application version and build information.
+
+---
+
+## Error Reference
+
+| HTTP Status | When Thrown |
+|---|---|
+| `400 Bad Request` | Invalid request body, missing required fields, duplicate coupon code, empty cart |
+| `401 Unauthorized` | Missing or expired JWT token |
+| `403 Forbidden` | Valid token but insufficient role (e.g. CUSTOMER on ADMIN endpoint) |
+| `404 Not Found` | Resource (product, order, address, coupon) not found |
+| `409 Conflict` | Duplicate email on registration, duplicate coupon code |
+| `500 Internal Server Error` | Unhandled server exception |
+
+---
+
+*Last updated: 2026-02-22 — Covers Phase 8 (Wishlist, Reviews, Admin UI) and Phase 9 (Variants, Recommendations, Email)*

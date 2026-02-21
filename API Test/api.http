@@ -1,94 +1,256 @@
 # ============================================================
-# ShopEase API Test Collection
+# ShopEase API Test Collection  v2.0
 # ============================================================
-# Extension requirement: REST Client by Huachao Mao (humao.rest-client)
-# 
-# Usage:
-# 1. Start your Spring Boot backend (http://localhost:8080)
-# 2. Click "Send Request" above any request to execute it
+# Extension: REST Client by Huachao Mao (humao.rest-client)
+#
+# USAGE:
+#   1.  Start backend:  mvn spring-boot:run          (http://localhost:8080)
+#   2.  Run "Login" below first to populate @token
+#   3.  Click "Send Request" above any block to execute
 # ============================================================
 
-@host = http://localhost:8080/api/v1
-@email = admin_test@shopease.com 
-# testapi_user@shopease.com use for this mail for ROLE CUSTOMER
-# admin_test@shopease.com use for this mail for ROLE ADMIN
+@host     = http://localhost:8080/api/v1
+@adminEmail    = admin_test@shopease.com
+@customerEmail = testapi_user@shopease.com
 @password = Password123!
 
-# Global variables (will be updated dynamically after login)
+# Token auto-populated from login response
 @token = {{login.response.body.$.accessToken}}
 
 # ============================================================
 # 1. AUTHENTICATION
 # ============================================================
 
-### Register a new user
+### [AUTH-01] Register a new customer account
 # @name register
 POST {{host}}/auth/register
 Content-Type: application/json
 
 {
   "name": "API Test User",
-  "email": "{{email}}",
-  "password": "{{password}}"
+  "email": "newuser@example.com",
+  "password": "Password123!"
 }
 
 ###
 
-### Login (Run this to set the @token variable for subsequent requests)
+### [AUTH-02] Login (Admin) — populates @token for all subsequent requests
 # @name login
 POST {{host}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "{{email}}",
+  "email": "{{adminEmail}}",
   "password": "{{password}}"
 }
 
 ###
 
-### Get current authenticated user profile
+### [AUTH-03] Login (Customer)
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{customerEmail}}",
+  "password": "{{password}}"
+}
+
+###
+
+### [AUTH-04] Get authenticated user profile
 GET {{host}}/users/me
 Authorization: Bearer {{token}}
 
 ###
 
+### [AUTH-05] Negative — Login with wrong password (expects 401)
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{adminEmail}}",
+  "password": "WrongPassword!"
+}
+
+###
+
+### [AUTH-06] Negative — Register with duplicate email (expects 400)
+POST {{host}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Duplicate",
+  "email": "{{adminEmail}}",
+  "password": "Password123!"
+}
+
+###
+
+### [AUTH-07] Negative — Access protected endpoint without token (expects 401)
+GET {{host}}/cart
+
+###
+
 # ============================================================
-# 2. PUBLIC ENDPOINTS (Products & Categories)
+# 2. PRODUCTS & CATEGORIES (Public)
 # ============================================================
 
-### Get all Categories
+### [PROD-01] Get all categories
 GET {{host}}/categories
 
 ###
 
-### Get all Products (Paginated)
+### [PROD-02] Get all products (paginated)
 GET {{host}}/products?page=0&size=10
 
 ###
 
-### Get Product by ID (Assuming Product ID 1 exists from seed data)
+### [PROD-03] Get products with search
+GET {{host}}/products?search=phone
+
+###
+
+### [PROD-04] Get products filtered by category
+GET {{host}}/products?categoryId=1&page=0&size=10
+
+###
+
+### [PROD-05] Get products filtered by price range
+GET {{host}}/products?minPrice=500&maxPrice=5000
+
+###
+
+### [PROD-06] Get single product by ID
 GET {{host}}/products/1
 
 ###
 
-### Search Products
-GET {{host}}/products?search=TEST
+### [PROD-07] Negative — Get non-existent product (expects 404)
+GET {{host}}/products/999999
+
+###
+
+### [PROD-08] Get product variants (size/color)
+GET {{host}}/products/1/variants
+
+###
+
+### [PROD-09] Get product recommendations (same-category)
+GET {{host}}/products/1/recommendations
 
 ###
 
 # ============================================================
-# 3. CART (Requires Auth Token)
+# 3. REVIEWS (Auth Required)
 # ============================================================
 
-### Get Cart
+### [REV-01] Get reviews for a product (public)
+GET {{host}}/reviews/product/1
+
+###
+
+### [REV-02] Submit a product review (auth required)
+POST {{host}}/reviews
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "rating": 5,
+  "comment": "Excellent product! Highly recommended."
+}
+
+###
+
+### [REV-03] Negative — Submit review without auth (expects 401)
+POST {{host}}/reviews
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "rating": 4,
+  "comment": "Good product"
+}
+
+###
+
+### [REV-04] Negative — Submit review with invalid rating (expects 400)
+POST {{host}}/reviews
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "rating": 0,
+  "comment": "Invalid rating"
+}
+
+###
+
+# ============================================================
+# 4. CART (Auth Required)
+# ============================================================
+
+### [CART-01] Get current user's cart
 GET {{host}}/cart
 Authorization: Bearer {{token}}
 
 ###
 
-### Add Item to Cart
+### [CART-02] Add item to cart
 POST {{host}}/cart/items
 Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "quantity": 2
+}
+
+###
+
+### [CART-03] Update item quantity in cart
+PUT {{host}}/cart/items/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "quantity": 5
+}
+
+###
+
+### [CART-04] Remove specific item from cart
+DELETE {{host}}/cart/items/1
+Authorization: Bearer {{token}}
+
+###
+
+### [CART-05] Apply a coupon to cart
+POST {{host}}/cart/coupon
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "couponCode": "WELCOME20"
+}
+
+###
+
+### [CART-06] Remove coupon from cart
+DELETE {{host}}/cart/coupon
+Authorization: Bearer {{token}}
+
+###
+
+### [CART-07] Clear entire cart
+DELETE {{host}}/cart
+Authorization: Bearer {{token}}
+
+###
+
+### [CART-08] Negative — Add item to cart without auth (expects 401)
+POST {{host}}/cart/items
 Content-Type: application/json
 
 {
@@ -98,25 +260,58 @@ Content-Type: application/json
 
 ###
 
-### Clear Cart
-DELETE {{host}}/cart
+### [CART-09] Negative — Add non-existent product to cart (expects 404)
+POST {{host}}/cart/items
 Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "productId": 999999,
+  "quantity": 1
+}
+
+###
+
+### [CART-10] Negative — Apply invalid coupon code (expects 400)
+POST {{host}}/cart/coupon
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "couponCode": "INVALIDCODE"
+}
 
 ###
 
 # ============================================================
-# 4. WISHLIST (Requires Auth Token)
+# 5. WISHLIST (Auth Required)
 # ============================================================
 
-### Get Wishlist
+### [WISH-01] Get user's wishlist
 GET {{host}}/wishlist
 Authorization: Bearer {{token}}
 
 ###
 
-### Add Product to Wishlist
+### [WISH-02] Add product to wishlist
 POST {{host}}/wishlist
 Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "productId": 2
+}
+
+###
+
+### [WISH-03] Remove product from wishlist
+DELETE {{host}}/wishlist/2
+Authorization: Bearer {{token}}
+
+###
+
+### [WISH-04] Negative — Add product to wishlist without auth (expects 401)
+POST {{host}}/wishlist
 Content-Type: application/json
 
 {
@@ -125,58 +320,323 @@ Content-Type: application/json
 
 ###
 
-### Remove Product from Wishlist
-DELETE {{host}}/wishlist/1
+# ============================================================
+# 6. ADDRESSES (Auth Required)
+# ============================================================
+
+### [ADDR-01] Get all saved addresses
+GET {{host}}/addresses
+Authorization: Bearer {{token}}
+
+###
+
+### [ADDR-02] Create a new address
+POST {{host}}/addresses
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "streetName": "123 MG Road",
+  "city": "Bangalore",
+  "state": "Karnataka",
+  "zipCode": "560001",
+  "country": "India",
+  "isDefault": true
+}
+
+###
+
+### [ADDR-03] Update an address
+PUT {{host}}/addresses/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "streetName": "456 Brigade Road",
+  "city": "Bangalore",
+  "state": "Karnataka",
+  "zipCode": "560025",
+  "country": "India",
+  "isDefault": false
+}
+
+###
+
+### [ADDR-04] Delete an address
+DELETE {{host}}/addresses/1
 Authorization: Bearer {{token}}
 
 ###
 
 # ============================================================
-# 5. ORDERS (Requires Auth Token)
+# 7. ORDERS & PAYMENTS (Auth Required)
 # ============================================================
 
-### Get My Orders
+### [ORD-01] Place order from cart (creates a PENDING order)
+POST {{host}}/payment/order
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "addressId": 1,
+  "notes": "Please leave at door"
+}
+
+###
+
+### [ORD-02] Create Razorpay payment order for a placed order
+POST {{host}}/payment/razorpay/create
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "orderId": 1
+}
+
+###
+
+### [ORD-03] Verify Razorpay payment signature (after success callback)
+POST {{host}}/payment/razorpay/verify
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "razorpayOrderId": "order_xxx",
+  "razorpayPaymentId": "pay_xxx",
+  "razorpaySignature": "sig_xxx"
+}
+
+###
+
+### [ORD-04] Get all my orders
 GET {{host}}/orders
 Authorization: Bearer {{token}}
 
 ###
 
-### Get Specific Order (Replace ID)
-GET {{host}}/orders/100
+### [ORD-05] Get specific order by ID
+GET {{host}}/orders/1
+Authorization: Bearer {{token}}
+
+###
+
+### [ORD-06] Negative — Get order without auth (expects 401)
+GET {{host}}/orders
+
+###
+
+### [ORD-07] Negative — Get non-existent order (expects 404)
+GET {{host}}/orders/999999
 Authorization: Bearer {{token}}
 
 ###
 
 # ============================================================
-# 6. ACTUATOR & HEALTH MONITORING
+# 8. ADMIN — Orders (Admin Token Required)
 # ============================================================
 
-### Actuator Health Check
-GET http://localhost:8080/actuator/health
+### [ADM-ORD-01] Get all orders (admin view, paginated)
+GET {{host}}/admin/orders?page=0&size=20
+Authorization: Bearer {{token}}
 
-### Actuator Info
-GET http://localhost:8080/actuator/info
+###
+
+### [ADM-ORD-02] Update order status
+PUT {{host}}/admin/orders/1/status
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "status": "SHIPPED"
+}
+
+###
 
 # ============================================================
-# 7. ADMIN (Requires Admin Token)
+# 9. ADMIN — Products (Admin Token Required)
 # ============================================================
 
-### Get All Coupons
+### [ADM-PROD-01] Create a new product
+POST {{host}}/admin/products
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Test API Product",
+  "sku": "API-TEST-001",
+  "description": "A product created via admin API for testing.",
+  "price": 1999.00,
+  "stockQuantity": 50,
+  "categoryId": 1
+}
+
+###
+
+### [ADM-PROD-02] Update a product
+PUT {{host}}/admin/products/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Updated Product Name",
+  "sku": "SKU-PHONE-001",
+  "description": "Updated description",
+  "price": 84999.00,
+  "stockQuantity": 25,
+  "categoryId": 1
+}
+
+###
+
+### [ADM-PROD-03] Delete a product
+DELETE {{host}}/admin/products/99
+Authorization: Bearer {{token}}
+
+###
+
+### [ADM-PROD-04] Negative — Create product as non-admin (expects 403)
+# Switch to customer token for this test
+POST {{host}}/admin/products
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Unauthorized Product",
+  "sku": "UNAUTH-001",
+  "price": 100.00,
+  "stockQuantity": 10,
+  "categoryId": 1
+}
+
+###
+
+# ============================================================
+# 10. ADMIN — Categories
+# ============================================================
+
+### [ADM-CAT-01] Create a new category
+POST {{host}}/admin/categories
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "API Test Category",
+  "description": "Created from API test"
+}
+
+###
+
+### [ADM-CAT-02] Update a category
+PUT {{host}}/admin/categories/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Updated Electronics",
+  "description": "All consumer electronics"
+}
+
+###
+
+### [ADM-CAT-03] Delete a category
+DELETE {{host}}/admin/categories/99
+Authorization: Bearer {{token}}
+
+###
+
+# ============================================================
+# 11. ADMIN — Coupons
+# ============================================================
+
+### [ADM-CPN-01] Get all coupons
 GET {{host}}/admin/coupons
 Authorization: Bearer {{token}}
 
 ###
 
-### Create Coupon
+### [ADM-CPN-02] Create coupon (percentage)
 POST {{host}}/admin/coupons
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "code": "WINTER26",
+  "code": "SUMMER30",
   "discountType": "PERCENTAGE",
-  "discountValue": 26.00,
-  "minOrderAmount": 500.00,
-  "validFrom": "2026-06-01T00:00:00Z",
-  "validUntil": "2026-08-31T23:59:59Z"
+  "discountValue": 30.00,
+  "minOrderAmount": 1000.00,
+  "validFrom": "2026-03-01T00:00:00Z",
+  "validUntil": "2026-06-30T23:59:59Z"
 }
+
+###
+
+### [ADM-CPN-03] Create coupon (fixed amount)
+POST {{host}}/admin/coupons
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "code": "FLAT200",
+  "discountType": "FIXED",
+  "discountValue": 200.00,
+  "minOrderAmount": 800.00,
+  "validFrom": "2026-03-01T00:00:00Z",
+  "validUntil": "2026-12-31T23:59:59Z"
+}
+
+###
+
+### [ADM-CPN-04] Delete a coupon
+DELETE {{host}}/admin/coupons/1
+Authorization: Bearer {{token}}
+
+###
+
+### [ADM-CPN-05] Negative — Create duplicate coupon code (expects 400/409)
+POST {{host}}/admin/coupons
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "code": "WELCOME20",
+  "discountType": "PERCENTAGE",
+  "discountValue": 10.00,
+  "validFrom": "2026-01-01T00:00:00Z",
+  "validUntil": "2026-12-31T23:59:59Z"
+}
+
+###
+
+# ============================================================
+# 12. ADMIN — Users
+# ============================================================
+
+### [ADM-USR-01] Get all registered users
+GET {{host}}/admin/users
+Authorization: Bearer {{token}}
+
+###
+
+# ============================================================
+# 13. ADMIN — Dashboard Stats
+# ============================================================
+
+### [ADM-STAT-01] Get dashboard statistics
+GET {{host}}/admin/dashboard/stats
+Authorization: Bearer {{token}}
+
+###
+
+# ============================================================
+# 14. HEALTH & MONITORING
+# ============================================================
+
+### [HEALTH-01] Actuator health check
+GET http://localhost:8080/actuator/health
+
+###
+
+### [HEALTH-02] Actuator info
+GET http://localhost:8080/actuator/info
+
+###

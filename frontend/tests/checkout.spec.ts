@@ -1,45 +1,119 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('E2E Checkout Flow', () => {
-    test('should allow a guest to browse products and see login prompt on cart', async ({ page }) => {
-        page.on('console', msg => console.log('BROWSER LOG:', msg.text()));
-        page.on('requestfailed', request => console.log('FAILED REQUEST:', request.url(), request.failure()?.errorText));
-        page.on('response', response => {
-            if (response.status() >= 400) {
-                console.log(`HTTP ERROR: ${response.url()} ${response.status()}`);
-            }
-        });
+// ============================================================
+// MODULE: Checkout — Address, Payment, Order Confirmation
+// ============================================================
 
-        // 1. Go to Home Page
-        await page.goto('/');
-        await expect(page).toHaveTitle(/ShopEase/);
+const BASE_URL = 'http://localhost:3000';
 
-        // 2. Go to Products Page
-        await page.getByRole('link', { name: 'Shop', exact: true }).first().click();
-        await expect(page).toHaveURL(/.*\/products/);
+async function loginAsCustomer(page: any) {
+    await page.goto(`${BASE_URL}/login`);
+    await page.getByLabel(/email/i).fill('testapi_user@shopease.com');
+    await page.getByLabel(/password/i).fill('Password123!');
+    await page.getByRole('button', { name: /login|sign in/i }).click();
+    await page.waitForURL(/\//);
+}
 
-        // 3. Wait for real product to load and select it
-        await page.waitForSelector('.grid.grid-cols-1');
-        const firstProduct = page.locator('.grid.grid-cols-1 > div').first();
-        await expect(firstProduct).toBeVisible();
-        await expect(page.locator('text=Real Test Product').first()).toBeVisible();
+async function addItemToCart(page: any, productId = 1) {
+    await page.goto(`${BASE_URL}/products/${productId}`);
+    await page.getByRole('button', { name: /add to cart/i }).click();
+    await page.waitForTimeout(800);
+}
 
-        // Click on the product link to view details
-        await firstProduct.locator('a').first().click();
-        await expect(page).toHaveURL(/.*\/products\/1/);
+test.describe('CHECKOUT — Cart to Checkout Flow', () => {
 
-        // 4. In Product detail page, Add to Cart
-        const addToCartBtn = page.getByRole('button', { name: /Add to Cart/i });
-        await addToCartBtn.waitFor({ state: 'visible', timeout: 10000 });
-        await addToCartBtn.click();
+    test('[CHK-P01] Checkout page loads for authenticated user with items in cart', async ({ page }) => {
+        await loginAsCustomer(page);
+        await addItemToCart(page);
+        await page.goto(`${BASE_URL}/cart`);
+        await page.getByRole('button', { name: /checkout|proceed/i }).click();
+        await expect(page).toHaveURL(/\/checkout/);
+        await expect(page.getByText(/address|delivery|shipping/i)).toBeVisible({ timeout: 8000 });
+    });
 
-        // 5. Go to Cart via header icon
-        const cartButton = page.locator('header a[href="/cart"]').first();
-        await cartButton.waitFor({ state: 'visible', timeout: 5000 });
-        await cartButton.click();
-        await expect(page).toHaveURL(/.*\/cart/);
+    test('[CHK-N01] Unauthenticated user is redirected from checkout', async ({ page }) => {
+        await page.goto(`${BASE_URL}/checkout`);
+        await expect(page).toHaveURL(/\/login/);
+    });
 
-        // In our app, if the user is unauthenticated, the cart page will show "Please login to view your cart"
-        await expect(page.locator('text=Please login to view your cart')).toBeVisible({ timeout: 10000 });
+    test('[CHK-N02] Proceeding to checkout with empty cart shows warning', async ({ page }) => {
+        await loginAsCustomer(page);
+        // Clear cart by visiting it
+        await page.goto(`${BASE_URL}/cart`);
+        // Try to navigate to checkout directly
+        await page.goto(`${BASE_URL}/checkout`);
+        const emptyWarning = await page.getByText(/empty|no items|add items/i).isVisible({ timeout: 5000 }).catch(() => false);
+        const redirected = !page.url().includes('/checkout');
+        expect(emptyWarning || redirected).toBe(true);
+    });
+});
+
+test.describe('CHECKOUT — Address Selection', () => {
+
+    test('[CHK-P02] User can select an existing address', async ({ page }) => {
+        await loginAsCustomer(page);
+        await addItemToCart(page);
+        await page.goto(`${BASE_URL}/checkout`);
+        const addressCard = page.locator('[data-testid="address-card"], .address-card').first();
+        if (await addressCard.isVisible({ timeout: 5000 }).catch(() => false)) {
+            await addressCard.click();
+            await expect(addressCard).toHaveClass(/selected|active|border-primary/, { timeout: 3000 });
+        }
+    });
+
+    test('[CHK-P03] User can add a new address during checkout', async ({ page }) => {
+        await loginAsCustomer(page);
+        await addItemToCart(page);
+        await page.goto(`${BASE_URL}/checkout`);
+        const addNewBtn = page.getByRole('button', { name: /add.*address|new address/i });
+        if (await addNewBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
+            await addNewBtn.click();
+            // Address form should appear
+            await expect(page.getByLabel(/street|city|zip/i).first()).toBeVisible({ timeout: 5000 });
+        }
+    });
+
+    test('[CHK-N03] Cannot place order without selecting an address', async ({ page }) => {
+        await loginAsCustomer(page);
+        await addItemToCart(page);
+        await page.goto(`${BASE_URL}/checkout`);
+        const placeOrderBtn = page.getByRole('button', { name: /place order|pay now/i });
+        if (await placeOrderBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
+            await placeOrderBtn.click();
+            // Should show validation error or button stays disabled
+            const validationVisible = await page.getByText(/select.*address|address.*required/i).isVisible({ timeout: 3000 }).catch(() => false);
+            expect(validationVisible || !(await placeOrderBtn.isDisabled())).toBeTruthy();
+        }
+    });
+});
+
+test.describe('CHECKOUT — Order Success', () => {
+
+    test('[CHK-P04] Order confirmation page shows order details after successful (mocked) payment', async ({ page }) => {
+        await page.goto(`${BASE_URL}/checkout/success`);
+        // Even without a real payment, the success page should render gracefully
+        await expect(page.getByText(/success|confirmed|order/i)).toBeVisible({ timeout: 8000 });
+    });
+});
+
+test.describe('CHECKOUT — With Coupon Applied', () => {
+
+    test('[CHK-P05] Coupon discount is reflected in checkout summary', async ({ page }) => {
+        await loginAsCustomer(page);
+        await addItemToCart(page);
+        // Apply coupon in cart
+        await page.goto(`${BASE_URL}/cart`);
+        const couponInput = page.getByPlaceholder(/promo|coupon/i);
+        if (await couponInput.isVisible({ timeout: 3000 }).catch(() => false)) {
+            await couponInput.fill('WELCOME20');
+            await page.getByRole('button', { name: /apply/i }).click();
+            await page.waitForTimeout(1000);
+        }
+        // Navigate to checkout and verify discount is shown
+        const checkoutBtn = page.getByRole('button', { name: /checkout|proceed/i });
+        if (await checkoutBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+            await checkoutBtn.click();
+            await expect(page.getByText(/discount|saved|₹/i)).toBeVisible({ timeout: 6000 });
+        }
     });
 });

@@ -54,6 +54,9 @@ export default function ProfilePage() {
                     </Card>
 
                     <div className="flex flex-col gap-2">
+                        <Button variant="ghost" className="justify-start" asChild>
+                            <a href="/wishlist">❤ Wishlist</a>
+                        </Button>
                         <Button variant="ghost" className="justify-start text-destructive hover:text-destructive hover:bg-destructive/10" onClick={handleLogout}>
                             <LogOut className="mr-2 h-4 w-4" /> Sign Out
                         </Button>
@@ -100,23 +103,42 @@ export default function ProfilePage() {
                                                         </div>
                                                         <div className="text-left sm:text-right">
                                                             <p className="font-bold text-lg">₹{order.totalAmount.toLocaleString()}</p>
-                                                            <Badge variant={order.status === 'DELIVERED' ? 'default' : order.status === 'CANCELLED' ? 'destructive' : 'secondary'} className="mt-1">
-                                                                {order.status}
-                                                            </Badge>
                                                         </div>
                                                     </div>
 
-                                                    <div className="space-y-3">
-                                                        {order.items?.map((item: any, idx) => (
-                                                            <div key={idx} className="flex justify-between items-center text-sm">
-                                                                <div className="flex gap-2 items-center">
-                                                                    <span className="text-muted-foreground">{item.quantity}x</span>
-                                                                    <span className="font-medium line-clamp-1">{item.productName || 'Product'}</span>
-                                                                </div>
-                                                                <span className="text-muted-foreground">₹{item.price.toLocaleString()}</span>
+                                                    {/* Order Status Stepper */}
+                                                    {(() => {
+                                                        const steps = ['PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED'];
+                                                        const isCancelled = order.status === 'CANCELLED';
+                                                        const currentIdx = isCancelled ? -1 : steps.indexOf(order.status);
+                                                        return (
+                                                            <div className="mt-3 pt-3 border-t">
+                                                                {isCancelled ? (
+                                                                    <Badge variant="destructive">CANCELLED</Badge>
+                                                                ) : (
+                                                                    <div className="flex items-center gap-0">
+                                                                        {steps.map((step, idx) => (
+                                                                            <div key={step} className="flex items-center flex-1 last:flex-none">
+                                                                                <div className={`flex flex-col items-center`}>
+                                                                                    <div className={`h-6 w-6 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-colors ${idx <= currentIdx ? 'bg-primary border-primary text-primary-foreground' : 'border-muted-foreground/30 text-muted-foreground'
+                                                                                        }`}>
+                                                                                        {idx <= currentIdx ? '✓' : idx + 1}
+                                                                                    </div>
+                                                                                    <span className={`text-[10px] mt-1 font-medium ${idx <= currentIdx ? 'text-primary' : 'text-muted-foreground'}`}>
+                                                                                        {step === 'CONFIRMED' ? 'CONFIRMED' : step === 'SHIPPED' ? 'SHIPPED' : step}
+                                                                                    </span>
+                                                                                </div>
+                                                                                {idx < steps.length - 1 && (
+                                                                                    <div className={`flex-1 h-0.5 mx-1 rounded ${idx < currentIdx ? 'bg-primary' : 'bg-muted-foreground/20'
+                                                                                        }`} />
+                                                                                )}
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                )}
                                                             </div>
-                                                        ))}
-                                                    </div>
+                                                        );
+                                                    })()}
                                                 </div>
                                             ))}
                                         </div>

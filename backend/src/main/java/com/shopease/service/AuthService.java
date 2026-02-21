@@ -26,6 +26,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
+    private final EmailService emailService;
 
     @Transactional
     public JwtResponse registerUser(RegisterRequest signUpRequest) {
@@ -48,6 +49,9 @@ public class AuthService {
         user.setCart(cart);
 
         userRepository.save(user);
+
+        // Send welcome email asynchronously
+        emailService.sendWelcomeEmail(user);
 
         // Auto-login after registration
         return authenticateUser(new LoginRequest(signUpRequest.getEmail(), signUpRequest.getPassword()));

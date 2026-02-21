@@ -61,6 +61,10 @@ public class Product {
     @JsonIgnore
     private List<Review> reviews = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<ProductVariant> variants = new ArrayList<>();
+
     @Column(precision = 3, scale = 2)
     private BigDecimal averageRating = BigDecimal.ZERO;
 

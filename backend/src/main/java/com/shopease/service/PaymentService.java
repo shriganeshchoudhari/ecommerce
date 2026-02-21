@@ -27,6 +27,7 @@ public class PaymentService {
     private final OrderRepository orderRepository;
     private final CartService cartService;
     private final AddressService addressService;
+    private final EmailService emailService;
 
     @Value("${app.razorpay.key-id}")
     private String keyId;
@@ -116,7 +117,12 @@ public class PaymentService {
         cart.getItems().clear();
         cart.setCoupon(null);
 
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+
+        // Send order confirmation email asynchronously
+        emailService.sendOrderConfirmationEmail(user, savedOrder);
+
+        return savedOrder;
     }
 
     @Transactional
