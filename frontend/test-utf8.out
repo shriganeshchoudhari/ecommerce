@@ -1,0 +1,101 @@
+﻿
+Running 9 tests using 8 workers
+
+  Γ£ô  3 [chromium] ΓÇ║ tests\example.spec.ts:3:5 ΓÇ║ has title (2.7s)
+  Γ£ô  7 [webkit] ΓÇ║ tests\example.spec.ts:3:5 ΓÇ║ has title (3.3s)
+  Γ£ô  4 [chromium] ΓÇ║ tests\example.spec.ts:10:5 ΓÇ║ get started link (4.9s)
+  Γ£ÿ  2 [chromium] ΓÇ║ tests\checkout.spec.ts:4:9 ΓÇ║ E2E Checkout Flow ΓÇ║ should allow a guest to browse products and see login prompt on cart (9.8s)
+  Γ£ÿ  8 [webkit] ΓÇ║ tests\checkout.spec.ts:4:9 ΓÇ║ E2E Checkout Flow ΓÇ║ should allow a guest to browse products and see login prompt on cart (20.1s)
+  Γ£ô  9 [webkit] ΓÇ║ tests\example.spec.ts:10:5 ΓÇ║ get started link (26.5s)
+  Γ£ÿ  6 [firefox] ΓÇ║ tests\example.spec.ts:3:5 ΓÇ║ has title (39.7s)
+  Γ£ÿ  5 [firefox] ΓÇ║ tests\checkout.spec.ts:4:9 ΓÇ║ E2E Checkout Flow ΓÇ║ should allow a guest to browse products and see login prompt on cart (37.0s)
+  Γ£ÿ  1 [firefox] ΓÇ║ tests\example.spec.ts:10:5 ΓÇ║ get started link (35.0s)
+
+
+  1) [chromium] ΓÇ║ tests\checkout.spec.ts:4:9 ΓÇ║ E2E Checkout Flow ΓÇ║ should allow a guest to browse products and see login prompt on cart 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=Real Test Product').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=Real Test Product').first()[22m
+
+
+      15 |         const firstProduct = page.locator('.grid.grid-cols-1 > div').first();
+      16 |         await expect(firstProduct).toBeVisible();
+    > 17 |         await expect(page.locator('text=Real Test Product').first()).toBeVisible();
+         |                                                                      ^
+      18 |
+      19 |         // Click on the product link to view details
+      20 |         await firstProduct.locator('a').first().click();
+        at F:\DEVOPS\ecommerce\frontend\tests\checkout.spec.ts:17:70
+
+    Error Context: test-results\checkout-E2E-Checkout-Flow-8a588-nd-see-login-prompt-on-cart-chromium\error-context.md
+
+  2) [firefox] ΓÇ║ tests\checkout.spec.ts:4:9 ΓÇ║ E2E Checkout Flow ΓÇ║ should allow a guest to browse products and see login prompt on cart 
+
+    [31mTest timeout of 30000ms exceeded.[39m
+
+    Error: page.goto: Test timeout of 30000ms exceeded.
+    Call log:
+    [2m  - navigating to "http://localhost:3000/", waiting until "load"[22m
+
+
+      4 |     test('should allow a guest to browse products and see login prompt on cart', async ({ page }) => {
+      5 |         // 1. Go to Home Page
+    > 6 |         await page.goto('/');
+        |                    ^
+      7 |         await expect(page).toHaveTitle(/ShopEase/);
+      8 |
+      9 |         // 2. Go to Products Page
+        at F:\DEVOPS\ecommerce\frontend\tests\checkout.spec.ts:6:20
+
+  3) [firefox] ΓÇ║ tests\example.spec.ts:3:5 ΓÇ║ has title ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    [31mTest timeout of 30000ms exceeded while setting up "page".[39m
+
+    Error: browserContext.newPage: Test timeout of 30000ms exceeded.
+
+  4) [firefox] ΓÇ║ tests\example.spec.ts:10:5 ΓÇ║ get started link ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    [31mTest timeout of 30000ms exceeded while setting up "page".[39m
+
+    Error: browserContext.newPage: Test timeout of 30000ms exceeded.
+
+  5) [webkit] ΓÇ║ tests\checkout.spec.ts:4:9 ΓÇ║ E2E Checkout Flow ΓÇ║ should allow a guest to browse products and see login prompt on cart 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=Real Test Product').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=Real Test Product').first()[22m
+
+
+      15 |         const firstProduct = page.locator('.grid.grid-cols-1 > div').first();
+      16 |         await expect(firstProduct).toBeVisible();
+    > 17 |         await expect(page.locator('text=Real Test Product').first()).toBeVisible();
+         |                                                                      ^
+      18 |
+      19 |         // Click on the product link to view details
+      20 |         await firstProduct.locator('a').first().click();
+        at F:\DEVOPS\ecommerce\frontend\tests\checkout.spec.ts:17:70
+
+    Error Context: test-results\checkout-E2E-Checkout-Flow-8a588-nd-see-login-prompt-on-cart-webkit\error-context.md
+
+  5 failed
+    [chromium] ΓÇ║ tests\checkout.spec.ts:4:9 ΓÇ║ E2E Checkout Flow ΓÇ║ should allow a guest to browse products and see login prompt on cart 
+    [firefox] ΓÇ║ tests\checkout.spec.ts:4:9 ΓÇ║ E2E Checkout Flow ΓÇ║ should allow a guest to browse products and see login prompt on cart 
+    [firefox] ΓÇ║ tests\example.spec.ts:3:5 ΓÇ║ has title ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    [firefox] ΓÇ║ tests\example.spec.ts:10:5 ΓÇ║ get started link ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    [webkit] ΓÇ║ tests\checkout.spec.ts:4:9 ΓÇ║ E2E Checkout Flow ΓÇ║ should allow a guest to browse products and see login prompt on cart 
+  4 passed (1.1m)
