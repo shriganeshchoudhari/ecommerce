@@ -62,7 +62,11 @@ Register a new customer account.
   "accessToken": "eyJhbGci...",
   "refreshToken": "eyJhbGci...",
   "tokenType": "Bearer",
-  "expiresIn": 3600
+  "expiresIn": 3600,
+  "id": 1,
+  "name": "John Doe",
+  "email": "john@example.com",
+  "role": "CUSTOMER"
 }
 ```
 
@@ -336,3 +340,19 @@ Verify payment after Razorpay callback.
   "topProducts": [...]
 }
 ```
+
+---
+
+## 12. System Health & Actuator (`/actuator`)
+
+### GET `/actuator/health`
+Check application and database health status.
+**Response `200`:**
+```json
+{
+  "status": "UP"
+}
+```
+
+### GET `/actuator/info`
+Get application information.

@@ -1,0 +1,156 @@
+# ============================================================
+# ShopEase API Test Collection
+# ============================================================
+# Extension requirement: REST Client by Huachao Mao (humao.rest-client)
+# 
+# Usage:
+# 1. Start your Spring Boot backend (http://localhost:8080)
+# 2. Click "Send Request" above any request to execute it
+# ============================================================
+
+@host = http://localhost:8080/api/v1
+@email = testapi_{{$datetime iso8601}}@shopease.com
+@password = Password123!
+
+# Global variables (will be updated dynamically after login)
+@token = {{login.response.body.accessToken}}
+
+# ============================================================
+# 1. AUTHENTICATION
+# ============================================================
+
+### Register a new user
+# @name register
+POST {{host}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "API Test User",
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+
+### Login (Run this to set the @token variable for subsequent requests)
+# @name login
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+
+### Get current authenticated user profile
+GET {{host}}/users/me
+Authorization: Bearer {{token}}
+
+###
+
+# ============================================================
+# 2. PUBLIC ENDPOINTS (Products & Categories)
+# ============================================================
+
+### Get all Categories
+GET {{host}}/categories
+
+###
+
+### Get all Products (Paginated)
+GET {{host}}/products?page=0&size=10
+
+###
+
+### Get Product by ID (Assuming Product ID 1 exists from seed data)
+GET {{host}}/products/1
+
+###
+
+### Search Products
+GET {{host}}/products?search=TEST
+
+###
+
+# ============================================================
+# 3. CART (Requires Auth Token)
+# ============================================================
+
+### Get Cart
+GET {{host}}/cart
+Authorization: Bearer {{token}}
+
+###
+
+### Add Item to Cart
+POST {{host}}/cart/items
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "quantity": 1
+}
+
+###
+
+### Clear Cart
+DELETE {{host}}/cart
+Authorization: Bearer {{token}}
+
+###
+
+# ============================================================
+# 4. WISHLIST (Requires Auth Token)
+# ============================================================
+
+### Get Wishlist
+GET {{host}}/wishlist
+Authorization: Bearer {{token}}
+
+###
+
+### Add Product to Wishlist
+POST {{host}}/wishlist
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "productId": 1
+}
+
+###
+
+### Remove Product from Wishlist
+DELETE {{host}}/wishlist/1
+Authorization: Bearer {{token}}
+
+###
+
+# ============================================================
+# 5. ORDERS (Requires Auth Token)
+# ============================================================
+
+### Get My Orders
+GET {{host}}/orders
+Authorization: Bearer {{token}}
+
+###
+
+### Get Specific Order (Replace ID)
+GET {{host}}/orders/100
+Authorization: Bearer {{token}}
+
+###
+
+# ============================================================
+# 6. ACTUATOR & HEALTH MONITORING
+# ============================================================
+
+### Actuator Health Check
+GET http://localhost:8080/actuator/health
+
+### Actuator Info
+GET http://localhost:8080/actuator/info
