@@ -212,6 +212,34 @@ CREATE INDEX idx_orders_status ON orders(status);
 
 ---
 
+### 2.13 `coupons`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| id | BIGSERIAL | PK |
+| code | VARCHAR(50) | UNIQUE, NOT NULL |
+| discount_type | VARCHAR(20) | PERCENTAGE, FIXED |
+| discount_value | NUMERIC(12,2) | NOT NULL |
+| min_order_amount | NUMERIC(12,2) | |
+| valid_from | TIMESTAMP | NOT NULL |
+| valid_until | TIMESTAMP | NOT NULL |
+| active | BOOLEAN | DEFAULT TRUE |
+
+---
+
+### 2.14 `product_variants`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| id | BIGSERIAL | PK |
+| product_id | BIGINT | FK → products(id) ON DELETE CASCADE |
+| sku_override | VARCHAR(50) | UNIQUE |
+| name | VARCHAR(100) | e.g. "Size M", "Color Red" |
+| price_override | NUMERIC(12,2) | |
+| stock_quantity | INT | NOT NULL DEFAULT 0 |
+
+---
+
 ## 3. Flyway Migration Files
 
 ```

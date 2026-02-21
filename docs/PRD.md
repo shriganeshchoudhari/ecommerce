@@ -42,13 +42,14 @@ ShopEase is a modern, full-featured ecommerce platform that allows customers to 
 
 ### In Scope
 - User registration and authentication (JWT-based)
-- Product browsing, search, and filtering
-- Product detail pages with image galleries
-- Shopping cart and wishlist management
+- OAuth2 Social Login (Google)
+- Product browsing, search, filtering, and recommendations
+- Product detail pages with image galleries and variants (Size/Color)
+- Shopping cart, promo codes, and wishlist management
 - Checkout with address management
 - Payment integration (Razorpay / Stripe)
 - Order tracking and history
-- Admin panel (product, category, order, user management)
+- Admin panel (product, category, order, user, coupon management)
 - Product reviews and ratings
 - Email notifications (registration, order confirmation)
 
@@ -72,6 +73,7 @@ ShopEase is a modern, full-featured ecommerce platform that allows customers to 
 | FR-AUTH-4 | JWT tokens expire after 1 hour; refresh tokens last 7 days |
 | FR-AUTH-5 | Admin role can access admin-only endpoints |
 | FR-AUTH-6 | Users can reset password via email OTP |
+| FR-AUTH-7 | Users can seamlessly register/login via OAuth2 Google |
 
 ### 5.2 Product Management
 | ID | Requirement |
@@ -80,9 +82,10 @@ ShopEase is a modern, full-featured ecommerce platform that allows customers to 
 | FR-PROD-2 | Products can be filtered by category, price range, rating |
 | FR-PROD-3 | Products can be searched by name and description (full-text search) |
 | FR-PROD-4 | Products have multiple images (primary + gallery) |
-| FR-PROD-5 | Products have variants (size, color) — v1.1 |
-| FR-PROD-6 | Admin can create, update, and delete products |
+| FR-PROD-5 | Products support variants (Size, Color, Material) with independent stock/price |
+| FR-PROD-6 | Admin can create, update, and delete products, variants, and coupons |
 | FR-PROD-7 | Stock levels update automatically on order placement |
+| FR-PROD-8 | System provides product recommendations (related products) on detail pages |
 
 ### 5.3 Shopping Cart
 | ID | Requirement |
@@ -91,6 +94,7 @@ ShopEase is a modern, full-featured ecommerce platform that allows customers to 
 | FR-CART-2 | Cart persists across sessions (database-backed) |
 | FR-CART-3 | Cart shows subtotal, quantity per item, and total |
 | FR-CART-4 | Guest cart merges with user cart on login |
+| FR-CART-5 | Users can apply a valid promo code to discount the cart total |
 
 ### 5.4 Wishlist
 | ID | Requirement |

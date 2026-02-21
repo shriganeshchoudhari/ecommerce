@@ -86,6 +86,11 @@ Register a new customer account.
 
 ---
 
+### GET `/auth/oauth2/google`
+Redirects to Google OAuth2 login page. Upon success, redirects back to frontend with the standard `accessToken` and `refreshToken`.
+
+---
+
 ## 3. Product APIs (`/products`)
 
 ### GET `/products`
@@ -143,9 +148,19 @@ Get single product detail.
     { "url": "https://...", "isPrimary": true }
   ],
   "averageRating": 4.5,
-  "reviewCount": 120
+  "reviewCount": 120,
+  "variants": [
+    { "id": 101, "name": "Color Red", "skuOverride": "ELEC-001-RED", "priceOverride": null, "stockQuantity": 20 }
+  ]
 }
 ```
+
+---
+
+### GET `/products/{id}/recommendations`
+Get related products for cross-selling.
+
+**Response `200`:** Returns a standard Product List (same format as `/products`).
 
 ---
 
@@ -235,6 +250,15 @@ Remove item from cart.
 ### DELETE `/cart`
 Clear entire cart.
 
+### POST `/cart/coupon`
+Apply a promo code to the cart.
+```json
+{ "code": "SUMMER10" }
+```
+
+### DELETE `/cart/coupon`
+Remove applied promo code.
+
 ---
 
 ## 6. Wishlist APIs (`/wishlist`) 🔒 Auth Required
@@ -322,7 +346,30 @@ Verify payment after Razorpay callback.
 
 ---
 
-## 11. Admin APIs (`/admin`) 🔒 ADMIN Only
+## 11. Coupon APIs (`/coupons`) 🔒 ADMIN Only
+
+### GET `/admin/coupons`
+List all coupons.
+
+### POST `/admin/coupons`
+Create a new store-wide coupon.
+```json
+{
+  "code": "SUMMER10",
+  "discountType": "PERCENTAGE",
+  "discountValue": 10.00,
+  "minOrderAmount": 500.00,
+  "validFrom": "2026-06-01T00:00:00Z",
+  "validUntil": "2026-08-31T23:59:59Z"
+}
+```
+
+### DELETE `/admin/coupons/{id}`
+Deactivate a coupon.
+
+---
+
+## 12. Admin APIs (`/admin`) 🔒 ADMIN Only
 
 ### GET `/admin/users` — List all users
 ### PUT `/admin/users/{id}/disable` — Disable a user
