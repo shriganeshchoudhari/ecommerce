@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 // MODULE: Wishlist — Add, Remove, View, Guard
 // ============================================================
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'http://127.0.0.1:3000';
 
 async function loginAsCustomer(page: any) {
     await page.goto(`${BASE_URL}/login`);
@@ -12,6 +12,7 @@ async function loginAsCustomer(page: any) {
     await page.getByLabel(/password/i).fill('Password123!');
     await page.getByRole('button', { name: /login|sign in/i }).click();
     await page.waitForURL(/\//);
+    await expect(page.getByRole('button', { name: /user menu/i })).toBeVisible({ timeout: 8000 });
 }
 
 test.describe('WISHLIST — Auth Guard', () => {

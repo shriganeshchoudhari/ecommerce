@@ -5,7 +5,7 @@ import { test, expect } from '@playwright/test';
 // Tests: Registration, Login, Logout, Profile, Guard Routes
 // ============================================================
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'http://127.0.0.1:3000';
 
 test.describe('AUTH — Registration', () => {
     const uniqueEmail = `test_${Date.now()}@example.com`;
@@ -49,7 +49,7 @@ test.describe('AUTH — Login', () => {
         await page.getByRole('button', { name: /login|sign in/i }).click();
         await expect(page).not.toHaveURL(/\/login/);
         // Navbar should show user info or logout button
-        await expect(page.getByRole('navigation')).toContainText(/cart|account|profile/i);
+        await expect(page.getByRole('button', { name: /user menu/i })).toBeVisible({ timeout: 5000 });
     });
 
     test('[AUTH-P03] Admin can login and see Admin link in nav', async ({ page }) => {
@@ -111,8 +111,8 @@ test.describe('AUTH — Logout', () => {
         await page.getByRole('button', { name: /login|sign in/i }).click();
         await page.waitForURL(/\//);
         // Open user dropdown and click logout
-        await page.getByRole('button', { name: /account|user|profile/i }).click();
-        await page.getByRole('menuitem', { name: /sign out|logout/i }).click();
+        await page.getByRole('button', { name: /user menu/i }).click();
+        await page.getByRole('menuitem', { name: /log out|logout|sign out/i }).click();
         // Should be redirected to home and show login link
         await expect(page.getByRole('link', { name: /login|sign in/i })).toBeVisible({ timeout: 5000 });
     });

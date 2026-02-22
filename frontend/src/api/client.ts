@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Automatically determining API base url from env or local default
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8080/api/v1';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -37,7 +37,7 @@ api.interceptors.response.use(
         localStorage.removeItem('shopease_token');
         // Avoid redirecting if already on login page
         if (!window.location.pathname.includes('/login')) {
-            window.location.href = '/login';
+          window.location.href = '/login';
         }
       }
     }

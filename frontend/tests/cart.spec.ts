@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 // MODULE: Cart — Add, Update, Remove, Coupon, Clear
 // ============================================================
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'http://127.0.0.1:3000';
 
 // Helper: login as customer
 async function loginAsCustomer(page: any) {
@@ -13,6 +13,7 @@ async function loginAsCustomer(page: any) {
     await page.getByLabel(/password/i).fill('Password123!');
     await page.getByRole('button', { name: /login|sign in/i }).click();
     await page.waitForURL(/\//);
+    await expect(page.getByRole('button', { name: /user menu/i })).toBeVisible({ timeout: 8000 });
 }
 
 test.describe('CART — Add to Cart', () => {

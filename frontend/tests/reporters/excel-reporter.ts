@@ -28,8 +28,8 @@ class ExcelReporter implements Reporter {
     private startTime = Date.now();
 
     onTestEnd(test: TestCase, result: TestResult): void {
-        const titleParts = test.titlePath();             // e.g. ['', 'AUTH — Login', '[AUTH-P02] ...']
-        const fileTitle = titleParts[1] || '';           // describe block
+        const titleParts = test.titlePath();
+        const fileTitle = titleParts.length >= 4 ? titleParts[3] : titleParts[2] || '';
         const testTitle = titleParts[titleParts.length - 1];
 
         const module = this.extractModule(fileTitle);

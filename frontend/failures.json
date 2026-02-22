@@ -1,0 +1,392 @@
+[
+  {
+    "module": "AUTH — Registration",
+    "id": "AUTH-P01",
+    "name": "New user can register with valid credentials",
+    "error": "Error: [2mexpect([22m[31mpage[39m[2m).not.[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m failed"
+  },
+  {
+    "module": "ADMIN — Access",
+    "id": "ADM-P01",
+    "name": "Admin user can access /admin dashboard",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "AUTH — Login",
+    "id": "AUTH-P02",
+    "name": "Customer can login with valid credentials",
+    "error": "Error: [2mexpect([22m[31mpage[39m[2m).not.[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m failed"
+  },
+  {
+    "module": "ADMIN — Dashboard",
+    "id": "ADM-P02",
+    "name": "Dashboard shows stats: total users, total orders, total revenue",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "AUTH — Login",
+    "id": "AUTH-P03",
+    "name": "Admin can login and see Admin link in nav",
+    "error": "Error: [2mexpect([22m[31mpage[39m[2m).not.[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m failed"
+  },
+  {
+    "module": "AUTH — Login",
+    "id": "AUTH-N03",
+    "name": "Login fails with wrong password",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "ADMIN — Orders",
+    "id": "ADM-P03",
+    "name": "Orders tab shows list of all orders",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "AUTH — Login",
+    "id": "AUTH-N04",
+    "name": "Login fails with non-existent email",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "ADMIN — Orders",
+    "id": "ADM-P04",
+    "name": "Admin can update order status",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "ADMIN — Coupons",
+    "id": "ADM-P05",
+    "name": "Coupons tab shows list of all coupons",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "AUTH — Logout",
+    "id": "AUTH-P04",
+    "name": "User can logout",
+    "error": "TimeoutError: locator.click: Timeout 10000ms exceeded."
+  },
+  {
+    "module": "ADMIN — Coupons",
+    "id": "ADM-P06",
+    "name": "Admin can create a new coupon",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "CART — Add",
+    "id": "CART-P01",
+    "name": "Logged-in user can add a product to cart from product detail",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "ADMIN — Coupons",
+    "id": "ADM-N03",
+    "name": "Creating coupon with duplicate code shows error",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "CART — Add",
+    "id": "CART-P02",
+    "name": "Cart count updates in navbar after adding product",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "ADMIN — Coupons",
+    "id": "ADM-P07",
+    "name": "Admin can delete a coupon",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "CART — Add",
+    "id": "CART-N01",
+    "name": "Unauthenticated user is prompted to login when adding to cart",
+    "error": "TimeoutError: locator.click: Timeout 10000ms exceeded."
+  },
+  {
+    "module": "ADMIN — Users",
+    "id": "ADM-P08",
+    "name": "Users tab shows list of registered users",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "CART — View",
+    "id": "CART-P03",
+    "name": "Cart page shows added items",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "ADMIN — Users",
+    "id": "ADM-P09",
+    "name": "Users list shows at least one user (seed data)",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "CART — View",
+    "id": "CART-P04",
+    "name": "Quantity can be increased in cart",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "ADMIN — Products",
+    "id": "ADM-P10",
+    "name": "Products tab shows list of products",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "CART — View",
+    "id": "CART-P05",
+    "name": "Item can be removed from cart",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "ADMIN — Products",
+    "id": "ADM-P11",
+    "name": "Admin can create a new product",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "CART — View",
+    "id": "CART-N02",
+    "name": "Empty cart shows empty state message",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "CHECKOUT — Cart",
+    "id": "CHK-P01",
+    "name": "Checkout page loads for authenticated user with items in cart",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "CART — Promo",
+    "id": "CART-P06",
+    "name": "Valid coupon code applies discount to cart total",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "CHECKOUT — Cart",
+    "id": "CHK-N01",
+    "name": "Unauthenticated user is redirected from checkout",
+    "error": "Error: [2mexpect([22m[31mpage[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m failed"
+  },
+  {
+    "module": "CART — Promo",
+    "id": "CART-N03",
+    "name": "Invalid coupon code shows error",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "CHECKOUT — Cart",
+    "id": "CHK-N02",
+    "name": "Proceeding to checkout with empty cart shows warning",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "CART — Promo",
+    "id": "CART-P07",
+    "name": "Applied coupon can be removed",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "CHECKOUT — Address",
+    "id": "CHK-P02",
+    "name": "User can select an existing address",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "PRODUCTS — Listing",
+    "id": "PROD-P01",
+    "name": "Products page loads and shows product cards",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "CHECKOUT — Address",
+    "id": "CHK-P03",
+    "name": "User can add a new address during checkout",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "PRODUCTS — Listing",
+    "id": "PROD-P02",
+    "name": "Search returns filtered results",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "CHECKOUT — Address",
+    "id": "CHK-N03",
+    "name": "Cannot place order without selecting an address",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "CHECKOUT — Order",
+    "id": "CHK-P04",
+    "name": "Order confirmation page shows order details after successful (mocked) payment",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "PRODUCTS — Listing",
+    "id": "PROD-P03",
+    "name": "Category filter narrows products",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "CHECKOUT — With",
+    "id": "CHK-P05",
+    "name": "Coupon discount is reflected in checkout summary",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "PRODUCTS — Listing",
+    "id": "PROD-N01",
+    "name": "Search with no results shows empty state",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "PROFILE — User",
+    "id": "PROF-P01",
+    "name": "Profile page shows user name and email",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "PRODUCTS — Detail",
+    "id": "PROD-P04",
+    "name": "Product detail page loads with name, price, Add to Cart button",
+    "error": "TimeoutError: locator.click: Timeout 10000ms exceeded."
+  },
+  {
+    "module": "PROFILE — User",
+    "id": "PROF-P02",
+    "name": "Profile page shows My Account heading",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "PRODUCTS — Detail",
+    "id": "PROD-P05",
+    "name": "Product gallery image click changes main image",
+    "error": "TimeoutError: locator.click: Timeout 10000ms exceeded."
+  },
+  {
+    "module": "PROFILE — Order",
+    "id": "PROF-P03",
+    "name": "Orders tab shows order history",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "PRODUCTS — Detail",
+    "id": "PROD-P06",
+    "name": "Quantity selector can be incremented and decremented",
+    "error": "TimeoutError: locator.click: Timeout 10000ms exceeded."
+  },
+  {
+    "module": "PROFILE — Order",
+    "id": "PROF-P04",
+    "name": "Order status stepper is visible on order cards",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "PRODUCTS — Detail",
+    "id": "PROD-N02",
+    "name": "Navigating to non-existent product shows error state",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "PROFILE — Order",
+    "id": "PROF-P05",
+    "name": "Cancelled orders show CANCELLED badge instead of stepper",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "PRODUCTS — Variants",
+    "id": "PROD-P07",
+    "name": "Variant chips appear for products with variants",
+    "error": "TimeoutError: locator.click: Timeout 10000ms exceeded."
+  },
+  {
+    "module": "PROFILE — Addresses",
+    "id": "PROF-P06",
+    "name": "Addresses tab shows saved addresses",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "PRODUCTS — Variants",
+    "id": "PROD-P08",
+    "name": "Clicking color chip shows selected color",
+    "error": "TimeoutError: locator.click: Timeout 10000ms exceeded."
+  },
+  {
+    "module": "PROFILE — Wishlist",
+    "id": "PROF-P07",
+    "name": "Wishlist link is visible in sidebar",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "PRODUCTS — Reviews",
+    "id": "PROD-P09",
+    "name": "Reviews section is visible on product detail page",
+    "error": "TimeoutError: locator.click: Timeout 10000ms exceeded."
+  },
+  {
+    "module": "PROFILE — Wishlist",
+    "id": "PROF-P08",
+    "name": "Wishlist link navigates to /wishlist",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "PROFILE — Logout",
+    "id": "PROF-P09",
+    "name": "User can sign out from profile sidebar",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "PRODUCTS — Reviews",
+    "id": "PROD-P10",
+    "name": "Unauthenticated user does NOT see write review form",
+    "error": "TimeoutError: locator.click: Timeout 10000ms exceeded."
+  },
+  {
+    "module": "WISHLIST — Adding",
+    "id": "WISH-P01",
+    "name": "Logged-in user can add a product to wishlist via heart button",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "PRODUCTS — Reviews",
+    "id": "PROD-P11",
+    "name": "Logged-in user sees write review form",
+    "error": "TimeoutError: locator.click: Timeout 10000ms exceeded."
+  },
+  {
+    "module": "WISHLIST — Adding",
+    "id": "WISH-P02",
+    "name": "Wishlist page shows saved products",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "PRODUCTS — Recommendations",
+    "id": "PROD-P12",
+    "name": "Recommendations carousel appears on product detail page when available",
+    "error": "TimeoutError: locator.click: Timeout 10000ms exceeded."
+  },
+  {
+    "module": "WISHLIST — Adding",
+    "id": "WISH-P03",
+    "name": "Product can be removed from wishlist page",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "WISHLIST — Adding",
+    "id": "WISH-P04",
+    "name": "Add to Cart works from wishlist page",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "WISHLIST — Adding",
+    "id": "WISH-N02",
+    "name": "Empty wishlist shows empty state",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  },
+  {
+    "module": "WISHLIST — Toggle",
+    "id": "WISH-P05",
+    "name": "Heart icon toggles filled/outline state on click",
+    "error": "Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed"
+  }
+]

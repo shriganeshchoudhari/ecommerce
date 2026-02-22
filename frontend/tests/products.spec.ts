@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 // MODULE: Products — Listing, Detail, Variants, Reviews
 // ============================================================
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'http://127.0.0.1:3000';
 
 test.describe('PRODUCTS — Listing & Filters', () => {
 
@@ -17,7 +17,7 @@ test.describe('PRODUCTS — Listing & Filters', () => {
 
     test('[PROD-P02] Search returns filtered results', async ({ page }) => {
         await page.goto(`${BASE_URL}/products`);
-        const searchInput = page.getByPlaceholder(/search/i);
+        const searchInput = page.getByPlaceholder(/search/i).first();
         await searchInput.fill('phone');
         await searchInput.press('Enter');
         await page.waitForTimeout(1000);
@@ -47,14 +47,18 @@ test.describe('PRODUCTS — Listing & Filters', () => {
 test.describe('PRODUCTS — Detail Page', () => {
 
     test('[PROD-P04] Product detail page loads with name, price, Add to Cart button', async ({ page }) => {
-        await page.goto(`${BASE_URL}/products/1`);
+        await page.goto(`${BASE_URL}/products`);
+        await page.locator('a[href^="/products/"]').first().click();
+        await page.waitForURL(/\/products\/\d+/);
         await expect(page.locator('h1')).toBeVisible({ timeout: 8000 });
         await expect(page.getByText(/₹|price/i)).toBeVisible();
         await expect(page.getByRole('button', { name: /add to cart/i })).toBeVisible();
     });
 
     test('[PROD-P05] Product gallery image click changes main image', async ({ page }) => {
-        await page.goto(`${BASE_URL}/products/1`);
+        await page.goto(`${BASE_URL}/products`);
+        await page.locator('a[href^="/products/"]').first().click();
+        await page.waitForURL(/\/products\/\d+/);
         const thumbnails = page.locator('img[alt]').nth(1);
         if (await thumbnails.isVisible()) {
             await thumbnails.click();
@@ -64,7 +68,9 @@ test.describe('PRODUCTS — Detail Page', () => {
     });
 
     test('[PROD-P06] Quantity selector can be incremented and decremented', async ({ page }) => {
-        await page.goto(`${BASE_URL}/products/1`);
+        await page.goto(`${BASE_URL}/products`);
+        await page.locator('a[href^="/products/"]').first().click();
+        await page.waitForURL(/\/products\/\d+/);
         const plusBtn = page.getByRole('button', { name: '+' });
         const minusBtn = page.getByRole('button', { name: '-' });
         await expect(plusBtn).toBeVisible({ timeout: 6000 });
@@ -86,7 +92,8 @@ test.describe('PRODUCTS — Variants Selector', () => {
     test('[PROD-P07] Variant chips appear for products with variants', async ({ page }) => {
         // Products with variants seeded in V9 migration (e.g. product with SKU-SHRT-001)
         await page.goto(`${BASE_URL}/products`);
-        await page.goto(`${BASE_URL}/products/1`);
+        await page.locator('a[href^="/products/"]').first().click();
+        await page.waitForURL(/\/products\/\d+/);
         // If variants exist, selector should render — pass silently if no variants
         const sizeLabel = page.getByText(/size:/i);
         if (await sizeLabel.isVisible({ timeout: 3000 }).catch(() => false)) {
@@ -97,7 +104,9 @@ test.describe('PRODUCTS — Variants Selector', () => {
     });
 
     test('[PROD-P08] Clicking color chip shows selected color', async ({ page }) => {
-        await page.goto(`${BASE_URL}/products/1`);
+        await page.goto(`${BASE_URL}/products`);
+        await page.locator('a[href^="/products/"]').first().click();
+        await page.waitForURL(/\/products\/\d+/);
         const colorLabel = page.getByText(/color:/i);
         if (await colorLabel.isVisible({ timeout: 3000 }).catch(() => false)) {
             const firstColorChip = page.locator('button').filter({ hasText: /black|white|gray|red|blue/i }).first();
@@ -110,12 +119,16 @@ test.describe('PRODUCTS — Variants Selector', () => {
 test.describe('PRODUCTS — Reviews Section', () => {
 
     test('[PROD-P09] Reviews section is visible on product detail page', async ({ page }) => {
-        await page.goto(`${BASE_URL}/products/1`);
+        await page.goto(`${BASE_URL}/products`);
+        await page.locator('a[href^="/products/"]').first().click();
+        await page.waitForURL(/\/products\/\d+/);
         await expect(page.getByText(/reviews|ratings/i)).toBeVisible({ timeout: 8000 });
     });
 
     test('[PROD-P10] Unauthenticated user does NOT see write review form', async ({ page }) => {
-        await page.goto(`${BASE_URL}/products/1`);
+        await page.goto(`${BASE_URL}/products`);
+        await page.locator('a[href^="/products/"]').first().click();
+        await page.waitForURL(/\/products\/\d+/);
         await expect(page.getByText(/write a review/i)).not.toBeVisible({ timeout: 5000 });
     });
 
@@ -127,7 +140,9 @@ test.describe('PRODUCTS — Reviews Section', () => {
         await page.getByRole('button', { name: /login|sign in/i }).click();
         await page.waitForURL(/\//);
 
-        await page.goto(`${BASE_URL}/products/1`);
+        await page.goto(`${BASE_URL}/products`);
+        await page.locator('a[href^="/products/"]').first().click();
+        await page.waitForURL(/\/products\/\d+/);
         await expect(page.getByText(/write a review/i)).toBeVisible({ timeout: 8000 });
     });
 });
@@ -135,7 +150,9 @@ test.describe('PRODUCTS — Reviews Section', () => {
 test.describe('PRODUCTS — Recommendations', () => {
 
     test('[PROD-P12] Recommendations carousel appears on product detail page when available', async ({ page }) => {
-        await page.goto(`${BASE_URL}/products/1`);
+        await page.goto(`${BASE_URL}/products`);
+        await page.locator('a[href^="/products/"]').first().click();
+        await page.waitForURL(/\/products\/\d+/);
         // Wait for page to load
         await page.waitForTimeout(2000);
         const recSection = page.getByText(/you might also like/i);
