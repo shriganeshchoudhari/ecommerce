@@ -5,6 +5,7 @@ import Providers from "./providers";
 import { Toaster } from "@/components/ui/sonner";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { AiChatWidget } from "@/components/AiChatWidget";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,6 +42,7 @@ export default function RootLayout({
           </div>
         </Providers>
         <Toaster />
+        <AiChatWidget />
       </body>
     </html>
   );

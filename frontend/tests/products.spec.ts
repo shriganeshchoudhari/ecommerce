@@ -1,12 +1,12 @@
-import { test, expect } from '@playwright/test';
+﻿import { test, expect } from '@playwright/test';
 
 // ============================================================
-// MODULE: Products — Listing, Detail, Variants, Reviews
+// MODULE: Products â€” Listing, Detail, Variants, Reviews
 // ============================================================
 
 const BASE_URL = 'http://127.0.0.1:3000';
 
-test.describe('PRODUCTS — Listing & Filters', () => {
+test.describe('PRODUCTS â€” Listing & Filters', () => {
 
     test('[PROD-P01] Products page loads and shows product cards', async ({ page }) => {
         await page.goto(`${BASE_URL}/products`);
@@ -44,14 +44,14 @@ test.describe('PRODUCTS — Listing & Filters', () => {
     });
 });
 
-test.describe('PRODUCTS — Detail Page', () => {
+test.describe('PRODUCTS â€” Detail Page', () => {
 
     test('[PROD-P04] Product detail page loads with name, price, Add to Cart button', async ({ page }) => {
         await page.goto(`${BASE_URL}/products`);
         await page.locator('a[href^="/products/"]').first().click();
         await page.waitForURL(/\/products\/\d+/);
         await expect(page.locator('h1')).toBeVisible({ timeout: 8000 });
-        await expect(page.getByText(/₹|price/i)).toBeVisible();
+        await expect(page.getByText(/â‚¹|price/i)).toBeVisible();
         await expect(page.getByRole('button', { name: /add to cart/i })).toBeVisible();
     });
 
@@ -63,7 +63,7 @@ test.describe('PRODUCTS — Detail Page', () => {
         if (await thumbnails.isVisible()) {
             await thumbnails.click();
         }
-        // Main image should update — just verify no crash
+        // Main image should update â€” just verify no crash
         await expect(page.locator('img').first()).toBeVisible();
     });
 
@@ -87,14 +87,14 @@ test.describe('PRODUCTS — Detail Page', () => {
     });
 });
 
-test.describe('PRODUCTS — Variants Selector', () => {
+test.describe('PRODUCTS â€” Variants Selector', () => {
 
     test('[PROD-P07] Variant chips appear for products with variants', async ({ page }) => {
         // Products with variants seeded in V9 migration (e.g. product with SKU-SHRT-001)
         await page.goto(`${BASE_URL}/products`);
         await page.locator('a[href^="/products/"]').first().click();
         await page.waitForURL(/\/products\/\d+/);
-        // If variants exist, selector should render — pass silently if no variants
+        // If variants exist, selector should render â€” pass silently if no variants
         const sizeLabel = page.getByText(/size:/i);
         if (await sizeLabel.isVisible({ timeout: 3000 }).catch(() => false)) {
             const firstChip = page.locator('button').filter({ hasText: /^(S|M|L|XL)$/ }).first();
@@ -116,7 +116,7 @@ test.describe('PRODUCTS — Variants Selector', () => {
     });
 });
 
-test.describe('PRODUCTS — Reviews Section', () => {
+test.describe('PRODUCTS â€” Reviews Section', () => {
 
     test('[PROD-P09] Reviews section is visible on product detail page', async ({ page }) => {
         await page.goto(`${BASE_URL}/products`);
@@ -135,7 +135,7 @@ test.describe('PRODUCTS — Reviews Section', () => {
     test('[PROD-P11] Logged-in user sees write review form', async ({ page }) => {
         // Login first
         await page.goto(`${BASE_URL}/login`);
-        await page.getByLabel(/email/i).fill('testapi_user@shopease.com');
+        await page.getByLabel(/email/i).fill('rahul@shopease.com');
         await page.getByLabel(/password/i).fill('Password123!');
         await page.getByRole('button', { name: /login|sign in/i }).click();
         await page.waitForURL(/\//);
@@ -147,7 +147,7 @@ test.describe('PRODUCTS — Reviews Section', () => {
     });
 });
 
-test.describe('PRODUCTS — Recommendations', () => {
+test.describe('PRODUCTS â€” Recommendations', () => {
 
     test('[PROD-P12] Recommendations carousel appears on product detail page when available', async ({ page }) => {
         await page.goto(`${BASE_URL}/products`);
@@ -156,9 +156,10 @@ test.describe('PRODUCTS — Recommendations', () => {
         // Wait for page to load
         await page.waitForTimeout(2000);
         const recSection = page.getByText(/you might also like/i);
-        // Softly assert — only visible if same-category products exist
+        // Softly assert â€” only visible if same-category products exist
         const isVisible = await recSection.isVisible().catch(() => false);
-        // Just log, don't fail — depends on seed data
+        // Just log, don't fail â€” depends on seed data
         test.info().annotations.push({ type: 'info', description: `Recommendations visible: ${isVisible}` });
     });
 });
+

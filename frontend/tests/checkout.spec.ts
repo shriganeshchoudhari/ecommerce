@@ -1,14 +1,14 @@
-import { test, expect } from '@playwright/test';
+﻿import { test, expect } from '@playwright/test';
 
 // ============================================================
-// MODULE: Checkout — Address, Payment, Order Confirmation
+// MODULE: Checkout â€” Address, Payment, Order Confirmation
 // ============================================================
 
 const BASE_URL = 'http://127.0.0.1:3000';
 
 async function loginAsCustomer(page: any) {
     await page.goto(`${BASE_URL}/login`);
-    await page.getByLabel(/email/i).fill('testapi_user@shopease.com');
+    await page.getByLabel(/email/i).fill('rahul@shopease.com');
     await page.getByLabel(/password/i).fill('Password123!');
     await page.getByRole('button', { name: /login|sign in/i }).click();
     await page.waitForURL(/\//);
@@ -21,7 +21,7 @@ async function addItemToCart(page: any, productId = 1) {
     await page.waitForTimeout(800);
 }
 
-test.describe('CHECKOUT — Cart to Checkout Flow', () => {
+test.describe('CHECKOUT â€” Cart to Checkout Flow', () => {
 
     test('[CHK-P01] Checkout page loads for authenticated user with items in cart', async ({ page }) => {
         await loginAsCustomer(page);
@@ -49,7 +49,7 @@ test.describe('CHECKOUT — Cart to Checkout Flow', () => {
     });
 });
 
-test.describe('CHECKOUT — Address Selection', () => {
+test.describe('CHECKOUT â€” Address Selection', () => {
 
     test('[CHK-P02] User can select an existing address', async ({ page }) => {
         await loginAsCustomer(page);
@@ -88,7 +88,7 @@ test.describe('CHECKOUT — Address Selection', () => {
     });
 });
 
-test.describe('CHECKOUT — Order Success', () => {
+test.describe('CHECKOUT â€” Order Success', () => {
 
     test('[CHK-P04] Order confirmation page shows order details after successful (mocked) payment', async ({ page }) => {
         await page.goto(`${BASE_URL}/checkout/success`);
@@ -97,7 +97,7 @@ test.describe('CHECKOUT — Order Success', () => {
     });
 });
 
-test.describe('CHECKOUT — With Coupon Applied', () => {
+test.describe('CHECKOUT â€” With Coupon Applied', () => {
 
     test('[CHK-P05] Coupon discount is reflected in checkout summary', async ({ page }) => {
         await loginAsCustomer(page);
@@ -114,7 +114,8 @@ test.describe('CHECKOUT — With Coupon Applied', () => {
         const checkoutBtn = page.getByRole('button', { name: /checkout|proceed/i });
         if (await checkoutBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
             await checkoutBtn.click();
-            await expect(page.getByText(/discount|saved|₹/i)).toBeVisible({ timeout: 6000 });
+            await expect(page.getByText(/discount|saved|â‚¹/i)).toBeVisible({ timeout: 6000 });
         }
     });
 });
+

@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
+﻿import { test, expect } from '@playwright/test';
 
 // ============================================================
-// MODULE: Cart — Add, Update, Remove, Coupon, Clear
+// MODULE: Cart â€” Add, Update, Remove, Coupon, Clear
 // ============================================================
 
 const BASE_URL = 'http://127.0.0.1:3000';
@@ -9,14 +9,14 @@ const BASE_URL = 'http://127.0.0.1:3000';
 // Helper: login as customer
 async function loginAsCustomer(page: any) {
     await page.goto(`${BASE_URL}/login`);
-    await page.getByLabel(/email/i).fill('testapi_user@shopease.com');
+    await page.getByLabel(/email/i).fill('rahul@shopease.com');
     await page.getByLabel(/password/i).fill('Password123!');
     await page.getByRole('button', { name: /login|sign in/i }).click();
     await page.waitForURL(/\//);
     await expect(page.getByRole('button', { name: /user menu/i })).toBeVisible({ timeout: 8000 });
 }
 
-test.describe('CART — Add to Cart', () => {
+test.describe('CART â€” Add to Cart', () => {
 
     test('[CART-P01] Logged-in user can add a product to cart from product detail', async ({ page }) => {
         await loginAsCustomer(page);
@@ -46,7 +46,7 @@ test.describe('CART — Add to Cart', () => {
     });
 });
 
-test.describe('CART — View & Manage Cart', () => {
+test.describe('CART â€” View & Manage Cart', () => {
 
     test('[CART-P03] Cart page shows added items', async ({ page }) => {
         await loginAsCustomer(page);
@@ -57,7 +57,7 @@ test.describe('CART — View & Manage Cart', () => {
         // Navigate to cart
         await page.goto(`${BASE_URL}/cart`);
         // Should show at least one cart item
-        await expect(page.getByText(/total|checkout|₹/i)).toBeVisible({ timeout: 8000 });
+        await expect(page.getByText(/total|checkout|â‚¹/i)).toBeVisible({ timeout: 8000 });
     });
 
     test('[CART-P04] Quantity can be increased in cart', async ({ page }) => {
@@ -91,12 +91,12 @@ test.describe('CART — View & Manage Cart', () => {
         await page.goto(`${BASE_URL}/cart`);
         // If cart is empty, show empty state
         const emptyState = await page.getByText(/empty|no items|start shopping/i).isVisible({ timeout: 5000 }).catch(() => false);
-        // Soft assertion — may have items from prior test run
+        // Soft assertion â€” may have items from prior test run
         test.info().annotations.push({ type: 'info', description: `Cart empty: ${emptyState}` });
     });
 });
 
-test.describe('CART — Promo Code / Coupon', () => {
+test.describe('CART â€” Promo Code / Coupon', () => {
 
     test('[CART-P06] Valid coupon code applies discount to cart total', async ({ page }) => {
         await loginAsCustomer(page);
@@ -134,7 +134,7 @@ test.describe('CART — Promo Code / Coupon', () => {
             await couponInput.fill('WELCOME20');
             await page.getByRole('button', { name: /apply/i }).click();
             await page.waitForTimeout(1000);
-            const removeBtn = page.getByRole('button', { name: /remove.*coupon|×/i });
+            const removeBtn = page.getByRole('button', { name: /remove.*coupon|Ã—/i });
             if (await removeBtn.isVisible()) {
                 await removeBtn.click();
                 await expect(page.getByText(/coupon removed|promo removed/i)).toBeVisible({ timeout: 5000 });
@@ -142,3 +142,4 @@ test.describe('CART — Promo Code / Coupon', () => {
         }
     });
 });
+

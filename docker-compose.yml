@@ -35,6 +35,17 @@ services:
       timeout: 5s
       retries: 5
 
+  ollama:
+    image: ollama/ollama:latest
+    container_name: shopease-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - shopease-network
+    restart: unless-stopped
+
   backend:
     build:
       context: ./backend
@@ -54,6 +65,7 @@ services:
       - CLOUDINARY_URL=${CLOUDINARY_URL:-}
       - APP_RAZORPAY_KEY_ID=${APP_RAZORPAY_KEY_ID:-}
       - APP_RAZORPAY_KEY_SECRET=${APP_RAZORPAY_KEY_SECRET:-}
+      - OLLAMA_URL=http://ollama:11434
     depends_on:
       db:
         condition: service_healthy
@@ -92,3 +104,4 @@ networks:
 volumes:
   postgres_data:
   redis_data:
+  ollama_data:

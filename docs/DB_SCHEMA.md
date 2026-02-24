@@ -14,6 +14,7 @@ users ──< orders ──< order_items >── products
 users ── cart ──< cart_items >── products
 users ──< wishlist_items >── products
 users ──< reviews >── products
+users ──< ai_conversations ──< ai_messages
 products >── categories
 orders ── payments
 products ──< product_images
@@ -240,6 +241,30 @@ CREATE INDEX idx_orders_status ON orders(status);
 
 ---
 
+### 2.15 `ai_conversations`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| id | BIGSERIAL | PK |
+| user_id | BIGINT | FK → users(id) ON DELETE CASCADE |
+| title | VARCHAR(200) | |
+| created_at | TIMESTAMP | DEFAULT NOW() |
+| updated_at | TIMESTAMP | |
+
+---
+
+### 2.16 `ai_messages`
+
+| Column | Type | Constraints |
+|--------|------|-------------|
+| id | BIGSERIAL | PK |
+| conversation_id | BIGINT | FK → ai_conversations(id) ON DELETE CASCADE |
+| role | VARCHAR(20) | NOT NULL (USER, ASSISTANT) |
+| content | TEXT | NOT NULL |
+| created_at | TIMESTAMP | DEFAULT NOW() |
+
+---
+
 ## 3. Flyway Migration Files
 
 ```
@@ -249,7 +274,8 @@ resources/db/migration/
 ├── V3__create_cart_wishlist.sql
 ├── V4__create_orders_payments.sql
 ├── V5__create_reviews.sql
-└── V6__seed_data.sql
+├── V6__seed_data.sql
+└── V10__ai_conversations.sql
 ```
 
 ---

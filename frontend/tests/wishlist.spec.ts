@@ -1,21 +1,21 @@
-import { test, expect } from '@playwright/test';
+﻿import { test, expect } from '@playwright/test';
 
 // ============================================================
-// MODULE: Wishlist — Add, Remove, View, Guard
+// MODULE: Wishlist â€” Add, Remove, View, Guard
 // ============================================================
 
 const BASE_URL = 'http://127.0.0.1:3000';
 
 async function loginAsCustomer(page: any) {
     await page.goto(`${BASE_URL}/login`);
-    await page.getByLabel(/email/i).fill('testapi_user@shopease.com');
+    await page.getByLabel(/email/i).fill('rahul@shopease.com');
     await page.getByLabel(/password/i).fill('Password123!');
     await page.getByRole('button', { name: /login|sign in/i }).click();
     await page.waitForURL(/\//);
     await expect(page.getByRole('button', { name: /user menu/i })).toBeVisible({ timeout: 8000 });
 }
 
-test.describe('WISHLIST — Auth Guard', () => {
+test.describe('WISHLIST â€” Auth Guard', () => {
 
     test('[WISH-N01] Unauthenticated user is redirected from /wishlist', async ({ page }) => {
         await page.goto(`${BASE_URL}/wishlist`);
@@ -23,7 +23,7 @@ test.describe('WISHLIST — Auth Guard', () => {
     });
 });
 
-test.describe('WISHLIST — Adding & Removing', () => {
+test.describe('WISHLIST â€” Adding & Removing', () => {
 
     test('[WISH-P01] Logged-in user can add a product to wishlist via heart button', async ({ page }) => {
         await loginAsCustomer(page);
@@ -79,13 +79,13 @@ test.describe('WISHLIST — Adding & Removing', () => {
     test('[WISH-N02] Empty wishlist shows empty state', async ({ page }) => {
         await loginAsCustomer(page);
         await page.goto(`${BASE_URL}/wishlist`);
-        // Check for empty state — may or may not be empty depending on prior tests
+        // Check for empty state â€” may or may not be empty depending on prior tests
         const wishlistHeading = page.getByRole('heading', { name: /wishlist/i });
         await expect(wishlistHeading).toBeVisible({ timeout: 6000 });
     });
 });
 
-test.describe('WISHLIST — Toggle Behavior', () => {
+test.describe('WISHLIST â€” Toggle Behavior', () => {
 
     test('[WISH-P05] Heart icon toggles filled/outline state on click', async ({ page }) => {
         await loginAsCustomer(page);
@@ -102,3 +102,4 @@ test.describe('WISHLIST — Toggle Behavior', () => {
         }
     });
 });
+

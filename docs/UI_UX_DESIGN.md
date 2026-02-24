@@ -204,6 +204,29 @@ Uses Tailwind spacing: 4px base unit. Key values: 4, 8, 12, 16, 24, 32, 48, 64.
 
 ---
 
+### 2.7 AI Chat Widget Element (Floating globally)
+
+```
+┌───────────────────────────────────────┐
+│                                     [X]│
+│ Ai Shopping Assistant                  │
+├───────────────────────────────────────┤
+│ [AI] Hi! I'm your ShopEase assistant.  │
+│      How can I help you today?         │
+│                                        │
+│          [User] Can you recommend some │
+│                 good headphones?       │
+│                                        │
+│ [AI] Certainly! Based on our catalog,  │
+│      I recommend the Sony WH-1000XM5.  │
+├───────────────────────────────────────┤
+│ [Type your message here...]        [->]│
+└───────────────────────────────────────┘
+                     (Floating Bubble) [💬]
+```
+
+---
+
 ## 3. Component Library
 
 | Component | Description |
@@ -223,6 +246,7 @@ Uses Tailwind spacing: 4px base unit. Key values: 4, 8, 12, 16, 24, 32, 48, 64.
 | `AddressForm` | Form for add/edit shipping address |
 | `AdminSidebar` | Admin navigation links |
 | `StatsCard` | Admin dashboard metric card |
+| `AiChatWidget` | Floating AI chat widget bubble and panel |
 
 ---
 

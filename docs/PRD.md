@@ -52,11 +52,11 @@ ShopEase is a modern, full-featured ecommerce platform that allows customers to 
 - Admin panel (product, category, order, user, coupon management)
 - Product reviews and ratings
 - Email notifications (registration, order confirmation)
+- AI Shopping Assistant (local LLM via Ollama)
 
 ### Out of Scope (v1)
 - Multi-vendor marketplace
 - Mobile app (iOS/Android)
-- Live chat support
 - Subscription/recurring billing
 - Loyalty points system
 
@@ -137,6 +137,15 @@ ShopEase is a modern, full-featured ecommerce platform that allows customers to 
 | FR-ADM-3 | Admin can manage users (view, disable) |
 | FR-ADM-4 | Admin can view sales dashboard (total revenue, orders, top products) |
 
+### 5.9 AI Shopping Assistant
+| ID | Requirement |
+|----|-------------|
+| FR-AI-1 | Chat widget is accessible on all pages for authenticated users |
+| FR-AI-2 | Assistant provides contextual help regarding products and categories |
+| FR-AI-3 | Conversation history is saved per user |
+| FR-AI-4 | Users can start new conversations or delete past ones |
+| FR-AI-5 | AI inference runs locally using Ollama |
+
 ---
 
 ## 6. Non-Functional Requirements
@@ -178,6 +187,7 @@ ShopEase is a modern, full-featured ecommerce platform that allows customers to 
 - As a customer, I want to securely pay online so I can complete my purchase.
 - As a customer, I want to track my order so I know when it will arrive.
 - As a customer, I want to leave a review so I can share my experience.
+- As a customer, I want to chat with an AI assistant to get product recommendations and shopping help.
 
 ### Admin
 - As an admin, I want to add/edit products so the catalogue stays up to date.

@@ -164,6 +164,19 @@ npx playwright install
 
 ---
 
+### Module 8 — AI Assistant [`tests/ai-assistant.spec.ts`](file:///f:/DEVOPS/ecommerce/frontend/tests/ai-assistant.spec.ts)
+
+| ID | Scenario | Type | Expected |
+|---|---|---|---|
+| AI-P01 | Chat bubble visible after login | ✅ Positive | Bubble appears on screen |
+| AI-P02 | Click bubble opens chat panel | ✅ Positive | Panel slides up |
+| AI-P03 | Sent message gets AI response | ✅ Positive | Response text appears |
+| AI-P04 | Close and reopen preserves chat | ✅ Positive | Messages are still there |
+| AI-N01 | Chat bubble hidden when not logged in | ❌ Negative | No bubble visible |
+| AI-N02 | Empty message cannot be sent | ❌ Negative | Send button is disabled |
+
+---
+
 ## Execution Commands
 
 ```bash
@@ -207,7 +220,8 @@ npx playwright show-report
 | Wishlist | 5 | 2 | 7 |
 | Admin | 11 | 3 | 14 |
 | Profile | 9 | 1 | 10 |
-| **Total** | **53** | **21** | **74** |
+| AI Assistant | 4 | 2 | 6 |
+| **Total** | **57** | **23** | **80** |
 
 ---
 

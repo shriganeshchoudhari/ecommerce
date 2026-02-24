@@ -26,14 +26,14 @@ This document describes the technical architecture, design decisions, and implem
 │                        API GATEWAY                           │
 │              (Spring Boot - Port 8080)                        │
 │  ┌────────────┐ ┌─────────────┐ ┌───────────┐ ┌──────────┐ │
-│  │ Auth Module│ │Product Mod. │ │Order Mod. │ │Pay. Mod. │ │
+│  │ Auth Module│ │Product Mod. │ │Order Mod. │ │ AI Mod.  │ │
 │  └────────────┘ └─────────────┘ └───────────┘ └──────────┘ │
-└───────┬─────────────────┬───────────────────────────────────┘
-        │                 │
-┌───────▼──────┐  ┌───────▼──────┐
-│  PostgreSQL  │  │    Redis      │
-│  (Primary DB)│  │   (Cache)     │
-└──────────────┘  └──────────────┘
+└───────┬─────────────────┬─────────────────┬─────────────────┘
+        │                 │                 │
+┌───────▼──────┐  ┌───────▼──────┐  ┌───────▼──────┐
+│  PostgreSQL  │  │    Redis     │  │ Ollama (AI)  │
+│  (Primary DB)│  │   (Cache)    │  │ (Docker)     │
+└──────────────┘  └──────────────┘  └──────────────┘
         │
 ┌───────▼──────┐
 │ AWS S3 /     │
@@ -69,6 +69,7 @@ This document describes the technical architecture, design decisions, and implem
 | Security | Spring Security + JWT | Industry standard |
 | Validation | Jakarta Bean Validation | Declarative, integrated |
 | Build Tool | Maven | Standard, reproducible builds |
+| AI Integration | Ollama REST API | Local LLM execution |
 
 ### 3.3 Data Layer
 
@@ -235,6 +236,7 @@ All APIs follow RESTful conventions. Base URL: `/api/v1`
 | Product Detail | `product:{id}` | 30 min |
 | Category Tree | `categories:all` | 1 hour |
 | User Cart | `cart:user:{id}` | 5 min |
+| AI Conversation | `ai:conv:{id}` | 10 min |
 
 Cache invalidated on write operations.
 

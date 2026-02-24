@@ -476,6 +476,50 @@ Application version and build information.
 
 ---
 
+## 16. AI Assistant APIs (`/ai`) 🔒 Auth Required
+
+### POST `/ai/chat`
+Send a message to the AI assistant.
+```json
+{
+  "conversationId": 1, // Optional, omitt to start new
+  "message": "Do you have any gaming laptops?"
+}
+```
+**Response `200`:**
+```json
+{
+  "conversationId": 1,
+  "response": "Yes, we have several gaming laptops in stock! For example..."
+}
+```
+
+### GET `/ai/conversations`
+List all conversations for the authenticated user.
+```json
+[
+  { "id": 1, "title": "Gaming Laptops", "updatedAt": "2026-02-24T10:00:00Z" }
+]
+```
+
+### GET `/ai/conversations/{id}`
+Get full message history for a conversation.
+```json
+{
+  "id": 1,
+  "title": "Gaming Laptops",
+  "messages": [
+    { "role": "USER", "content": "..." },
+    { "role": "ASSISTANT", "content": "..." }
+  ]
+}
+```
+
+### DELETE `/ai/conversations/{id}`
+Delete a conversation.
+
+---
+
 ## Error Reference
 
 | HTTP Status | When Thrown |

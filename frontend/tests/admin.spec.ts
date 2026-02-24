@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
+﻿import { test, expect } from '@playwright/test';
 
 // ============================================================
-// MODULE: Admin Dashboard — Products, Orders, Coupons, Users
+// MODULE: Admin Dashboard â€” Products, Orders, Coupons, Users
 // ============================================================
 
 const BASE_URL = 'http://127.0.0.1:3000';
@@ -15,7 +15,7 @@ async function loginAsAdmin(page: any) {
     await expect(page.getByRole('button', { name: /user menu/i })).toBeVisible({ timeout: 8000 });
 }
 
-test.describe('ADMIN — Access Control', () => {
+test.describe('ADMIN â€” Access Control', () => {
 
     test('[ADM-N01] Unauthenticated user cannot access /admin', async ({ page }) => {
         await page.goto(`${BASE_URL}/admin`);
@@ -24,7 +24,7 @@ test.describe('ADMIN — Access Control', () => {
 
     test('[ADM-N02] Customer role cannot access /admin', async ({ page }) => {
         await page.goto(`${BASE_URL}/login`);
-        await page.getByLabel(/email/i).fill('testapi_user@shopease.com');
+        await page.getByLabel(/email/i).fill('rahul@shopease.com');
         await page.getByLabel(/password/i).fill('Password123!');
         await page.getByRole('button', { name: /login|sign in/i }).click();
         await page.waitForURL(/\//);
@@ -40,7 +40,7 @@ test.describe('ADMIN — Access Control', () => {
     });
 });
 
-test.describe('ADMIN — Dashboard Stats', () => {
+test.describe('ADMIN â€” Dashboard Stats', () => {
 
     test('[ADM-P02] Dashboard shows stats: total users, total orders, total revenue', async ({ page }) => {
         await loginAsAdmin(page);
@@ -49,7 +49,7 @@ test.describe('ADMIN — Dashboard Stats', () => {
     });
 });
 
-test.describe('ADMIN — Orders Management', () => {
+test.describe('ADMIN â€” Orders Management', () => {
 
     test('[ADM-P03] Orders tab shows list of all orders', async ({ page }) => {
         await loginAsAdmin(page);
@@ -72,7 +72,7 @@ test.describe('ADMIN — Orders Management', () => {
     });
 });
 
-test.describe('ADMIN — Coupons Management', () => {
+test.describe('ADMIN â€” Coupons Management', () => {
 
     test('[ADM-P05] Coupons tab shows list of all coupons', async ({ page }) => {
         await loginAsAdmin(page);
@@ -116,7 +116,7 @@ test.describe('ADMIN — Coupons Management', () => {
         await loginAsAdmin(page);
         await page.goto(`${BASE_URL}/admin`);
         await page.getByRole('tab', { name: /coupon/i }).click();
-        const deleteBtn = page.getByRole('button', { name: /delete|×/i }).last();
+        const deleteBtn = page.getByRole('button', { name: /delete|Ã—/i }).last();
         if (await deleteBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
             await deleteBtn.click();
             // Confirm dialog may appear
@@ -129,7 +129,7 @@ test.describe('ADMIN — Coupons Management', () => {
     });
 });
 
-test.describe('ADMIN — Users Management', () => {
+test.describe('ADMIN â€” Users Management', () => {
 
     test('[ADM-P08] Users tab shows list of registered users', async ({ page }) => {
         await loginAsAdmin(page);
@@ -147,7 +147,7 @@ test.describe('ADMIN — Users Management', () => {
     });
 });
 
-test.describe('ADMIN — Products Management', () => {
+test.describe('ADMIN â€” Products Management', () => {
 
     test('[ADM-P10] Products tab shows list of products', async ({ page }) => {
         await loginAsAdmin(page);
@@ -173,3 +173,4 @@ test.describe('ADMIN — Products Management', () => {
         }
     });
 });
+

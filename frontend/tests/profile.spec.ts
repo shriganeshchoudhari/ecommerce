@@ -1,21 +1,21 @@
-import { test, expect } from '@playwright/test';
+﻿import { test, expect } from '@playwright/test';
 
 // ============================================================
-// MODULE: Profile — Order History, Address Book, Status Stepper
+// MODULE: Profile â€” Order History, Address Book, Status Stepper
 // ============================================================
 
 const BASE_URL = 'http://127.0.0.1:3000';
 
 async function loginAsCustomer(page: any) {
     await page.goto(`${BASE_URL}/login`);
-    await page.getByLabel(/email/i).fill('testapi_user@shopease.com');
+    await page.getByLabel(/email/i).fill('rahul@shopease.com');
     await page.getByLabel(/password/i).fill('Password123!');
     await page.getByRole('button', { name: /login|sign in/i }).click();
     await page.waitForURL(/\//);
     await expect(page.getByRole('button', { name: /user menu/i })).toBeVisible({ timeout: 8000 });
 }
 
-test.describe('PROFILE — Auth Guard', () => {
+test.describe('PROFILE â€” Auth Guard', () => {
 
     test('[PROF-N01] Unauthenticated user is redirected to login', async ({ page }) => {
         await page.goto(`${BASE_URL}/profile`);
@@ -23,7 +23,7 @@ test.describe('PROFILE — Auth Guard', () => {
     });
 });
 
-test.describe('PROFILE — User Info', () => {
+test.describe('PROFILE â€” User Info', () => {
 
     test('[PROF-P01] Profile page shows user name and email', async ({ page }) => {
         await loginAsCustomer(page);
@@ -38,14 +38,14 @@ test.describe('PROFILE — User Info', () => {
     });
 });
 
-test.describe('PROFILE — Order History', () => {
+test.describe('PROFILE â€” Order History', () => {
 
     test('[PROF-P03] Orders tab shows order history', async ({ page }) => {
         await loginAsCustomer(page);
         await page.goto(`${BASE_URL}/profile`);
         await page.getByRole('tab', { name: /orders/i }).click();
         // Should show order list or empty state
-        const hasOrders = await page.getByText(/order #|₹/i).isVisible({ timeout: 5000 }).catch(() => false);
+        const hasOrders = await page.getByText(/order #|â‚¹/i).isVisible({ timeout: 5000 }).catch(() => false);
         const emptyMsg = await page.getByText(/no orders|placed any/i).isVisible({ timeout: 5000 }).catch(() => false);
         expect(hasOrders || emptyMsg).toBe(true);
     });
@@ -55,7 +55,7 @@ test.describe('PROFILE — Order History', () => {
         await page.goto(`${BASE_URL}/profile`);
         await page.getByRole('tab', { name: /orders/i }).click();
         // If there are orders, the stepper should be present
-        const hasOrders = await page.getByText(/order #|₹/i).isVisible({ timeout: 5000 }).catch(() => false);
+        const hasOrders = await page.getByText(/order #|â‚¹/i).isVisible({ timeout: 5000 }).catch(() => false);
         if (hasOrders) {
             await expect(page.getByText(/PENDING|CONFIRMED|SHIPPED|DELIVERED/i)).toBeVisible({ timeout: 5000 });
         }
@@ -66,13 +66,13 @@ test.describe('PROFILE — Order History', () => {
         await page.goto(`${BASE_URL}/profile`);
         await page.getByRole('tab', { name: /orders/i }).click();
         const cancelledBadge = page.getByText('CANCELLED');
-        // Soft check — only verify if a cancelled order exists
+        // Soft check â€” only verify if a cancelled order exists
         const visible = await cancelledBadge.isVisible({ timeout: 3000 }).catch(() => false);
         test.info().annotations.push({ type: 'info', description: `Cancelled order visible: ${visible}` });
     });
 });
 
-test.describe('PROFILE — Addresses', () => {
+test.describe('PROFILE â€” Addresses', () => {
 
     test('[PROF-P06] Addresses tab shows saved addresses', async ({ page }) => {
         await loginAsCustomer(page);
@@ -82,7 +82,7 @@ test.describe('PROFILE — Addresses', () => {
     });
 });
 
-test.describe('PROFILE — Wishlist Link', () => {
+test.describe('PROFILE â€” Wishlist Link', () => {
 
     test('[PROF-P07] Wishlist link is visible in sidebar', async ({ page }) => {
         await loginAsCustomer(page);
@@ -98,7 +98,7 @@ test.describe('PROFILE — Wishlist Link', () => {
     });
 });
 
-test.describe('PROFILE — Logout', () => {
+test.describe('PROFILE â€” Logout', () => {
 
     test('[PROF-P09] User can sign out from profile sidebar', async ({ page }) => {
         await loginAsCustomer(page);
@@ -107,3 +107,4 @@ test.describe('PROFILE — Logout', () => {
         await expect(page.getByRole('link', { name: /login|sign in/i })).toBeVisible({ timeout: 6000 });
     });
 });
+

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+﻿import { test, expect } from '@playwright/test';
 
 // ============================================================
 // MODULE: Authentication
@@ -7,7 +7,7 @@ import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'http://127.0.0.1:3000';
 
-test.describe('AUTH — Registration', () => {
+test.describe('AUTH â€” Registration', () => {
     const uniqueEmail = `test_${Date.now()}@example.com`;
 
     test('[AUTH-P01] New user can register with valid credentials', async ({ page }) => {
@@ -40,11 +40,11 @@ test.describe('AUTH — Registration', () => {
     });
 });
 
-test.describe('AUTH — Login', () => {
+test.describe('AUTH â€” Login', () => {
 
     test('[AUTH-P02] Customer can login with valid credentials', async ({ page }) => {
         await page.goto(`${BASE_URL}/login`);
-        await page.getByLabel(/email/i).fill('testapi_user@shopease.com');
+        await page.getByLabel(/email/i).fill('rahul@shopease.com');
         await page.getByLabel(/password/i).fill('Password123!');
         await page.getByRole('button', { name: /login|sign in/i }).click();
         await expect(page).not.toHaveURL(/\/login/);
@@ -78,7 +78,7 @@ test.describe('AUTH — Login', () => {
     });
 });
 
-test.describe('AUTH — Guard Routes', () => {
+test.describe('AUTH â€” Guard Routes', () => {
 
     test('[AUTH-N05] Unauthenticated user is redirected from /profile', async ({ page }) => {
         await page.goto(`${BASE_URL}/profile`);
@@ -93,7 +93,7 @@ test.describe('AUTH — Guard Routes', () => {
     test('[AUTH-N07] Non-admin user cannot access /admin', async ({ page }) => {
         // Login as customer
         await page.goto(`${BASE_URL}/login`);
-        await page.getByLabel(/email/i).fill('testapi_user@shopease.com');
+        await page.getByLabel(/email/i).fill('rahul@shopease.com');
         await page.getByLabel(/password/i).fill('Password123!');
         await page.getByRole('button', { name: /login|sign in/i }).click();
         await page.goto(`${BASE_URL}/admin`);
@@ -102,11 +102,11 @@ test.describe('AUTH — Guard Routes', () => {
     });
 });
 
-test.describe('AUTH — Logout', () => {
+test.describe('AUTH â€” Logout', () => {
 
     test('[AUTH-P04] User can logout', async ({ page }) => {
         await page.goto(`${BASE_URL}/login`);
-        await page.getByLabel(/email/i).fill('testapi_user@shopease.com');
+        await page.getByLabel(/email/i).fill('rahul@shopease.com');
         await page.getByLabel(/password/i).fill('Password123!');
         await page.getByRole('button', { name: /login|sign in/i }).click();
         await page.waitForURL(/\//);
@@ -117,3 +117,4 @@ test.describe('AUTH — Logout', () => {
         await expect(page.getByRole('link', { name: /login|sign in/i })).toBeVisible({ timeout: 5000 });
     });
 });
+
