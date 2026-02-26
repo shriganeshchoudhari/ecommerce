@@ -207,6 +207,20 @@ npx playwright test -g "Negative|AUTH-N|PROD-N|CART-N|CHK-N|WISH-N|ADM-N|PROF-N"
 npx playwright show-report
 ```
 
+### API Tests (Postman/Newman)
+
+To run the automated API testing suite mapping back to `API_TEST_CASES.md`:
+
+```bash
+# Windows
+run_postman_tests.bat
+
+# macOS/Linux
+./run_postman_tests.sh
+```
+
+This will run all API assertion scripts and generate a beautifully formatted report at `docs/ShopEase_API_Test_Report.html`.
+
 ---
 
 ## Test Suite Summary

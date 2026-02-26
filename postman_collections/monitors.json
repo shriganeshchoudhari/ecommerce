@@ -1,0 +1,28 @@
+{
+    "monitor": {
+        "name": "ShopEase Core API Health",
+        "schedule": {
+            "cron": "0 * * * *",
+            "timezone": "UTC"
+        },
+        "collection": "postman_collections/ShopEase API Tests.postman_collection.json",
+        "environment": "postman_environments/local.postman_environment.json",
+        "notifications": {
+            "onError": [
+                {
+                    "email": "admin_test@shopease.com"
+                }
+            ],
+            "onFailure": [
+                {
+                    "email": "admin_test@shopease.com"
+                }
+            ]
+        },
+        "options": {
+            "strictSSL": false,
+            "followRedirects": true,
+            "requestTimeout": 5000
+        }
+    }
+}

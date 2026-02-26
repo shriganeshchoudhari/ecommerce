@@ -640,3 +640,43 @@ GET http://localhost:8080/actuator/health
 GET http://localhost:8080/actuator/info
 
 ###
+
+# ============================================================
+# 15. AI ASSISTANT (Auth Required)
+# ============================================================
+
+### [AI-01] Chat with AI Assistant
+POST {{host}}/ai/chat
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "message": "Can you recommend a gaming laptop?"
+}
+
+###
+
+### [AI-02] Get user's AI conversations
+GET {{host}}/ai/conversations
+Authorization: Bearer {{token}}
+
+###
+
+### [AI-03] Negative — Chat without message body (expects 400)
+POST {{host}}/ai/chat
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{}
+
+###
+
+### [AI-04] Negative — Access AI without auth (expects 401)
+POST {{host}}/ai/chat
+Content-Type: application/json
+
+{
+  "message": "Hello"
+}
+
+###
